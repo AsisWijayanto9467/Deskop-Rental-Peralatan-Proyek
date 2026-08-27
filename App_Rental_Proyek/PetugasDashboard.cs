@@ -10,7 +10,7 @@ namespace App_Rental_Proyek
 {
     public partial class PetugasDashboard : Form
     {
-        private UserControl currentControl = null;
+        private Control currentControl = null; // Gunakan Control sebagai tipe dasar
         private Guna.UI2.WinForms.Guna2Button currentButton = null;
 
         private readonly Color DefaultColor = Color.FromArgb(23, 59, 99);
@@ -33,7 +33,7 @@ namespace App_Rental_Proyek
         // ============================================
         // METHOD UNTUK MENAMPILKAN USER CONTROL
         // ============================================
-        private void ShowControl(UserControl control)
+        private void ShowControl(Control control)
         {
             if (currentControl != null)
             {
@@ -96,38 +96,65 @@ namespace App_Rental_Proyek
         // ============================================
         private void ShowDashboard()
         {
+            // Ganti dengan UserControl Dashboard yang sesuai
+            // ShowControl(new UserControls.Petugas.DashboardPetugas());
+            SetActiveButton(btnDashboard);
         }
 
         private void ShowPenyewaan()
         {
+            // Ganti dengan UserControl Penyewaan yang sesuai
+            // ShowControl(new UserControls.Petugas.Penyewaan());
+            SetActiveButton(btnPenyewaan);
         }
 
         private void ShowPembayaran()
         {
+            // Ganti dengan UserControl Pembayaran yang sesuai
+            // ShowControl(new UserControls.Petugas.Pembayaran());
+            SetActiveButton(btnPembayaran);
         }
 
         private void ShowPersiapanAlat()
         {
+            // Ganti dengan UserControl PersiapanAlat yang sesuai
+            // ShowControl(new UserControls.Petugas.PersiapanAlat());
+            SetActiveButton(btnPersiapanAlat);
         }
 
         private void ShowPengembalian()
         {
+            // Ganti dengan UserControl Pengembalian yang sesuai
+            // ShowControl(new UserControls.Petugas.Pengembalian());
+            SetActiveButton(btnPengembalian);
         }
 
         private void ShowDenda()
         {
+            // Ganti dengan UserControl Denda yang sesuai
+            // ShowControl(new UserControls.Petugas.Denda());
+            SetActiveButton(btnDenda);
         }
 
         private void ShowLaporan()
         {
+            // Ganti dengan UserControl Laporan yang sesuai
+            // ShowControl(new UserControls.Petugas.Laporan());
+            SetActiveButton(btnLaporan);
         }
 
         private void ShowLokasi()
         {
+            // Ganti dengan UserControl Lokasi yang sesuai
+            // ShowControl(new UserControls.Petugas.Lokasi());
+            SetActiveButton(btnLokasi);
         }
 
         private void ShowAlatProyek()
         {
+            // Ganti dengan UserControl AlatProyek yang sesuai
+            // ShowControl(new UserControls.Petugas.AlatProyek());
+            SetActiveButton(btnAlatProyek);
         }
 
         // ============================================

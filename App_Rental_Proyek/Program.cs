@@ -53,12 +53,12 @@ namespace App_Rental_Proyek
 
             // MODE 1: LOGIN
 
-            Application.Run(new Login());
+            //Application.Run(new Login());
 
 
             // MODE 2: AUTO LOGIN / DASHBOARD
 
-            /*
+            
             string usernameLogin = "admin";
 
             UserModel user = AutoLogin(usernameLogin);
@@ -71,7 +71,7 @@ namespace App_Rental_Proyek
             {
                 Application.Run(new Login());
             }
-            */
+
         }
 
         private static UserModel AutoLogin(string username)

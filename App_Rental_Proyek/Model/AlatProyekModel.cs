@@ -16,6 +16,8 @@ namespace App_Rental_Proyek.Model
         public string Kondisi { get; set; } = "baik"; // baik, rusak_ringan, rusak_berat
         public string Status { get; set; } = "tersedia"; // tersedia, disewa, maintenance, tidak_aktif
         public string? Gambar { get; set; }
+        public string? NamaKategori { get; set; }
+        public string? NamaLokasi { get; set; }
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
     }
