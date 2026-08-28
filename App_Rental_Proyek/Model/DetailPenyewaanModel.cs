@@ -15,5 +15,11 @@ namespace App_Rental_Proyek.Model
         public string? Catatan { get; set; }
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
+
+        // =====================
+        // Properti untuk tampilan (hasil JOIN)
+        // =====================
+        public string KodeAlat { get; set; } = string.Empty;
+        public string NamaAlat { get; set; } = string.Empty;
     }
 }

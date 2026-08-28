@@ -128,15 +128,13 @@ namespace App_Rental_Proyek
 
         private void ShowPenyewaan()
         {
-            // Ganti dengan UserControl Penyewaan yang sesuai
-            // ShowControl(new UserControls.Penyewaan());
+            ShowControl(new UserControls.Admin.Penyewaan.PenyewaanList()); // Memanggil PenyewaanList
             SetActiveButton(btnPenyewaan);
         }
 
         private void ShowPembayaran()
         {
-            // Ganti dengan UserControl Pembayaran yang sesuai
-            // ShowControl(new UserControls.Pembayaran());
+            ShowControl(new UserControls.Admin.Pembayaran.PembayaranList()); // Memanggil PembayaranList
             SetActiveButton(btnPembayaran);
         }
 

@@ -20,5 +20,15 @@ namespace App_Rental_Proyek.Model
         public ulong? ProcessedBy { get; set; }
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
+
+        // =====================
+        // Properti untuk tampilan (hasil JOIN)
+        // =====================
+        public string NamaCustomer { get; set; } = string.Empty;
+        public string EmailCustomer { get; set; } = string.Empty;
+        public string NoTeleponCustomer { get; set; } = string.Empty;
+        public string AlamatCustomer { get; set; } = string.Empty;
+        public string NamaPetugas { get; set; } = string.Empty;
+        public int JumlahAlat { get; set; } = 0;
     }
 }
