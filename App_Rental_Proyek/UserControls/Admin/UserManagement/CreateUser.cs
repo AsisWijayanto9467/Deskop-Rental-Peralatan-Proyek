@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using MySql.Data.MySqlClient;
 using App_Rental_Proyek.Config;
 using App_Rental_Proyek.Model;
+using App_Rental_Proyek.Helper;
 using BCrypt.Net;
 
 namespace App_Rental_Proyek.UserControl.Admin
@@ -16,6 +17,7 @@ namespace App_Rental_Proyek.UserControl.Admin
     {
         private string selectedRole = "user";
 
+        
         public CreateUser()
         {
             InitializeComponent();
@@ -24,8 +26,14 @@ namespace App_Rental_Proyek.UserControl.Admin
 
         private void CreateUser_Load(object sender, EventArgs e)
         {
-            // Setup default values
             SetupDefaultValues();
+
+            // ✅ Cek session
+            if (!SessionManager.IsLoggedIn)
+            {
+                MessageBox.Show("Session user tidak ditemukan. Aktivitas tidak akan dicatat ke log.",
+                    "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
         #region Initialization Methods
@@ -304,35 +312,146 @@ namespace App_Rental_Proyek.UserControl.Admin
 
         #endregion
 
-        #region Save/Create User Method
+        #region Create User with Activity Log - Combined Method
 
-        private bool CreateUserInDatabase(UserModel user)
+        /// <summary>
+        /// Create user dan catat aktivitas dalam satu transaction
+        /// </summary>
+        private bool CreateUserWithActivityLog(UserModel user)
         {
+            MySqlConnection connection = null;
+            MySqlTransaction transaction = null;
+
+
+
             try
             {
-                string query = @"
+                // Buka koneksi dan mulai transaction
+                connection = DatabaseConnection.GetConnection();
+                connection.Open();
+                transaction = connection.BeginTransaction();
+
+                // 1. Insert user ke tabel users
+                string insertQuery = @"
                     INSERT INTO users (nama, username, email, password, no_telepon, alamat, role, status, created_at, updated_at)
-                    VALUES (@nama, @username, @email, @password, @no_telepon, @alamat, @role, @status, NOW(), NOW())";
+                    VALUES (@nama, @username, @email, @password, @no_telepon, @alamat, @role, @status, NOW(), NOW());
+                    SELECT LAST_INSERT_ID();";
 
-                MySqlParameter[] parameters = new MySqlParameter[]
+                ulong newUserId;
+
+                using (MySqlCommand insertCmd = new MySqlCommand(insertQuery, connection, transaction))
                 {
-                    new MySqlParameter("@nama", user.Nama),
-                    new MySqlParameter("@username", user.Username),
-                    new MySqlParameter("@email", user.Email),
-                    new MySqlParameter("@password", user.Password), // Sudah di-hash dengan BCrypt
-                    new MySqlParameter("@no_telepon", user.NoTelepon ?? (object)DBNull.Value),
-                    new MySqlParameter("@alamat", user.Alamat ?? (object)DBNull.Value),
-                    new MySqlParameter("@role", user.Role),
-                    new MySqlParameter("@status", user.Status)
-                };
+                    insertCmd.Parameters.AddWithValue("@nama", user.Nama);
+                    insertCmd.Parameters.AddWithValue("@username", user.Username);
+                    insertCmd.Parameters.AddWithValue("@email", user.Email);
+                    insertCmd.Parameters.AddWithValue("@password", user.Password); // Sudah di-hash dengan BCrypt
+                    insertCmd.Parameters.AddWithValue("@no_telepon", (object)user.NoTelepon ?? DBNull.Value);
+                    insertCmd.Parameters.AddWithValue("@alamat", (object)user.Alamat ?? DBNull.Value);
+                    insertCmd.Parameters.AddWithValue("@role", user.Role);
+                    insertCmd.Parameters.AddWithValue("@status", user.Status);
 
-                return DatabaseConnection.ExecuteQuery(query, parameters) > 0;
+                    // Execute dan dapatkan ID user baru
+                    newUserId = Convert.ToUInt64(insertCmd.ExecuteScalar());
+
+                    if (newUserId == 0)
+                    {
+                        transaction.Rollback();
+                        return false;
+                    }
+                }
+
+                // 2. Catat aktivitas pembuatan user ke activity_logs
+                string logQuery = @"
+                    INSERT INTO activity_logs 
+                    (user_id, aktivitas, modul, referensi_id, ip_address, created_at) 
+                    VALUES 
+                    (@userId, @aktivitas, @modul, @referensiId, @ipAddress, NOW())";
+
+                using (MySqlCommand logCmd = new MySqlCommand(logQuery, connection, transaction))
+                {
+                    ulong currentUserId = SessionManager.GetCurrentUserId();
+
+                    if (currentUserId == 0)
+                    {
+                        transaction.Commit();
+                        return true;
+                    }
+
+                    string ipAddress = GetClientIpAddress();
+                    string activityDescription = $"Menambah user baru '{user.Username}' dengan role {user.Role}";
+
+                    logCmd.Parameters.AddWithValue("@userId", currentUserId);
+                    logCmd.Parameters.AddWithValue("@aktivitas", activityDescription);
+                    logCmd.Parameters.AddWithValue("@modul", "User Management");
+                    logCmd.Parameters.AddWithValue("@referensiId", newUserId);
+                    logCmd.Parameters.AddWithValue("@ipAddress", ipAddress);
+
+                    int logResult = logCmd.ExecuteNonQuery();
+
+                    if (logResult <= 0)
+                    {
+                        transaction.Rollback();
+                        return false;
+                    }
+                }
+
+                // Commit transaction jika semua berhasil
+                transaction.Commit();
+                return true;
             }
             catch (Exception ex)
             {
+                // Rollback jika terjadi error
+                if (transaction != null)
+                {
+                    try
+                    {
+                        transaction.Rollback();
+                    }
+                    catch { /* Ignore rollback error */ }
+                }
+
                 MessageBox.Show($"Error creating user: {ex.Message}", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
+            }
+            finally
+            {
+                // Tutup connection
+                if (connection != null)
+                {
+                    if (connection.State == ConnectionState.Open)
+                    {
+                        connection.Close();
+                    }
+                    connection.Dispose();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Get Client IP Address
+        /// </summary>
+        private string GetClientIpAddress()
+        {
+            try
+            {
+                string hostName = System.Net.Dns.GetHostName();
+                var addresses = System.Net.Dns.GetHostAddresses(hostName);
+
+                foreach (var address in addresses)
+                {
+                    if (address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                    {
+                        return address.ToString();
+                    }
+                }
+
+                return "127.0.0.1";
+            }
+            catch
+            {
+                return "127.0.0.1";
             }
         }
 
@@ -351,7 +470,7 @@ namespace App_Rental_Proyek.UserControl.Admin
                 }
 
                 // Check if username already exists
-                if (IsUsernameExists(txtUsername.Text))
+                if (IsUsernameExists(txtUsername.Text.Trim()))
                 {
                     MessageBox.Show("Username sudah digunakan! Silakan gunakan username lain.",
                         "Validasi Gagal", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -361,7 +480,7 @@ namespace App_Rental_Proyek.UserControl.Admin
                 }
 
                 // Check if email already exists
-                if (IsEmailExists(txtEmail.Text))
+                if (IsEmailExists(txtEmail.Text.Trim()))
                 {
                     MessageBox.Show("Email sudah terdaftar! Silakan gunakan email lain.",
                         "Validasi Gagal", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -397,10 +516,10 @@ namespace App_Rental_Proyek.UserControl.Admin
                     Status = status
                 };
 
-                // Save to database
-                if (CreateUserInDatabase(newUser))
+                // Save to database dengan activity log
+                if (CreateUserWithActivityLog(newUser))
                 {
-                    MessageBox.Show("User berhasil ditambahkan!",
+                    MessageBox.Show("User berhasil ditambahkan dan aktivitas tercatat!",
                         "Sukses", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     // Set DialogResult to OK so parent form knows to refresh

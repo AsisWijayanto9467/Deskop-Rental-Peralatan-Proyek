@@ -215,6 +215,8 @@ namespace App_Rental_Proyek
 
             if (result == DialogResult.Yes)
             {
+                Helper.Session.Clear();
+
                 Login loginForm = new Login();
                 loginForm.Show();
                 this.Close();

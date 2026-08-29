@@ -1,6 +1,7 @@
 ﻿using App_Rental_Proyek.Config;
 using App_Rental_Proyek.Model;
 using App_Rental_Proyek.UserControl.Admin;
+using App_Rental_Proyek.Helper;
 using Guna.UI2.WinForms;
 using MySql.Data.MySqlClient;
 using System;
@@ -24,17 +25,49 @@ namespace App_Rental_Proyek.UserControls.Admin
         private string _currentStatus = "Semua";
         private string _currentRole = "Semua";
 
+        // ❌ HAPUS property ini - tidak perlu lagi
+        // [Browsable(false)]
+        // [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        // public UserModel CurrentLoggedInUser { get; set; }
+
         public UserList()
         {
             InitializeComponent();
             InitializeGridView();
             InitializeComboBoxes();
             LoadUsers();
+
+            // ✅ Cek session di constructor
+            CheckSessionAndSetupUI();
         }
 
         private void UserList_Load(object sender, EventArgs e)
         {
-            // Sudah di-load di constructor
+            // ✅ Gunakan SessionManager, bukan dari ParentForm.Tag
+            CheckSessionAndSetupUI();
+        }
+
+        // ✅ Method untuk mengecek session dan setup UI
+        private void CheckSessionAndSetupUI()
+        {
+            if (!SessionManager.IsLoggedIn)
+            {
+                System.Diagnostics.Debug.WriteLine("Warning: UserList - Tidak ada user login!");
+                btnTambah.Enabled = false;
+                lbTotalUser.Text = "⚠️ Session tidak ditemukan";
+
+                // Tampilkan peringatan sekali saja
+                MessageBox.Show("Session user tidak ditemukan. Aktivitas tidak akan dicatat ke log.",
+                    "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            else
+            {
+                btnTambah.Enabled = true;
+
+                // Tampilkan user yang login di status bar (opsional)
+                string currentUser = SessionManager.CurrentUser?.Nama ?? "Unknown";
+                lbTotalUser.Text = $"User: {currentUser} | Total: {_allUsers?.Count ?? 0} users";
+            }
         }
 
         // ============================================
@@ -148,91 +181,143 @@ namespace App_Rental_Proyek.UserControls.Admin
             return users;
         }
 
-        private bool InsertUserToDatabase(UserModel user)
+        // ⚠️ Method ini TIDAK DIGUNAKAN - bisa dihapus atau dikomentari
+        // private bool InsertUserToDatabase(UserModel user) { ... }
+
+        // ⚠️ Method ini TIDAK DIGUNAKAN - bisa dihapus atau dikomentari
+        // private bool UpdateUserInDatabase(UserModel user) { ... }
+
+        // ============================================
+        // DELETE USER WITH ACTIVITY LOG - COMBINED METHOD
+        // ============================================
+        private bool DeleteUserWithActivityLog(ulong userId, UserModel userToDelete)
         {
+            MySqlConnection connection = null;
+            MySqlTransaction transaction = null;
+
             try
             {
-                string query = @"
-                    INSERT INTO users (nama, username, email, password, no_telepon, alamat, role, status, created_at, updated_at)
-                    VALUES (@nama, @username, @email, @password, @no_telepon, @alamat, @role, @status, NOW(), NOW())";
+                // Buka koneksi dan mulai transaction
+                connection = DatabaseConnection.GetConnection();
+                connection.Open();
+                transaction = connection.BeginTransaction();
 
-                MySqlParameter[] parameters = new MySqlParameter[]
+                // 1. Hapus user dari tabel users
+                string deleteQuery = "DELETE FROM users WHERE id = @id";
+
+                using (MySqlCommand deleteCmd = new MySqlCommand(deleteQuery, connection, transaction))
                 {
-                    new MySqlParameter("@nama", user.Nama),
-                    new MySqlParameter("@username", user.Username),
-                    new MySqlParameter("@email", user.Email),
-                    new MySqlParameter("@password", user.Password),
-                    new MySqlParameter("@no_telepon", (object)user.NoTelepon ?? DBNull.Value),
-                    new MySqlParameter("@alamat", (object)user.Alamat ?? DBNull.Value),
-                    new MySqlParameter("@role", user.Role),
-                    new MySqlParameter("@status", user.Status)
-                };
+                    deleteCmd.Parameters.AddWithValue("@id", userId);
+                    int deleteResult = deleteCmd.ExecuteNonQuery();
 
-                return DatabaseConnection.ExecuteQuery(query, parameters) > 0;
+                    if (deleteResult <= 0)
+                    {
+                        // Rollback jika gagal menghapus user
+                        transaction.Rollback();
+                        return false;
+                    }
+                }
+
+                // ✅ Gunakan SessionManager untuk mendapatkan user ID
+                ulong currentUserId = SessionManager.GetCurrentUserId();
+
+                // ✅ Jika user tidak login, skip log
+                if (currentUserId == 0)
+                {
+                    transaction.Commit();
+
+                    MessageBox.Show("User berhasil dihapus.\n\n" +
+                        "⚠️ Peringatan: Aktivitas tidak dicatat ke log karena session tidak ditemukan.\n" +
+                        "Admin yang melakukan penghapusan tidak teridentifikasi.",
+                        "Informasi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return true;
+                }
+
+                // 2. Catat aktivitas penghapusan ke activity_logs
+                string logQuery = @"
+                    INSERT INTO activity_logs 
+                    (user_id, aktivitas, modul, referensi_id, ip_address, created_at) 
+                    VALUES 
+                    (@userId, @aktivitas, @modul, @referensiId, @ipAddress, NOW())";
+
+                using (MySqlCommand logCmd = new MySqlCommand(logQuery, connection, transaction))
+                {
+                    string ipAddress = GetClientIpAddress();
+                    string activityDescription = $"Menghapus user '{userToDelete.Nama}' (username: {userToDelete.Username})";
+
+                    logCmd.Parameters.AddWithValue("@userId", currentUserId);
+                    logCmd.Parameters.AddWithValue("@aktivitas", activityDescription);
+                    logCmd.Parameters.AddWithValue("@modul", "User Management");
+                    logCmd.Parameters.AddWithValue("@referensiId", userId);
+                    logCmd.Parameters.AddWithValue("@ipAddress", ipAddress);
+
+                    int logResult = logCmd.ExecuteNonQuery();
+
+                    if (logResult <= 0)
+                    {
+                        // Rollback jika gagal mencatat log
+                        transaction.Rollback();
+                        return false;
+                    }
+                }
+
+                // Commit transaction jika semua berhasil
+                transaction.Commit();
+                return true;
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error inserting user: {ex.Message}", "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
-            }
-        }
-
-        private bool UpdateUserInDatabase(UserModel user)
-        {
-            try
-            {
-                string query = @"
-                    UPDATE users
-                    SET nama = @nama,
-                        username = @username,
-                        email = @email,
-                        no_telepon = @no_telepon,
-                        alamat = @alamat,
-                        role = @role,
-                        status = @status,
-                        updated_at = NOW()
-                    WHERE id = @id";
-
-                MySqlParameter[] parameters = new MySqlParameter[]
+                // Rollback jika terjadi error
+                if (transaction != null)
                 {
-                    new MySqlParameter("@id", user.Id),
-                    new MySqlParameter("@nama", user.Nama),
-                    new MySqlParameter("@username", user.Username),
-                    new MySqlParameter("@email", user.Email),
-                    new MySqlParameter("@no_telepon", (object)user.NoTelepon ?? DBNull.Value),
-                    new MySqlParameter("@alamat", (object)user.Alamat ?? DBNull.Value),
-                    new MySqlParameter("@role", user.Role),
-                    new MySqlParameter("@status", user.Status)
-                };
+                    try
+                    {
+                        transaction.Rollback();
+                    }
+                    catch { /* Ignore rollback error */ }
+                }
 
-                return DatabaseConnection.ExecuteQuery(query, parameters) > 0;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error updating user: {ex.Message}", "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
-            }
-        }
-
-        private bool DeleteUserFromDatabase(ulong id)
-        {
-            try
-            {
-                string query = "DELETE FROM users WHERE id = @id";
-                MySqlParameter[] parameters = new MySqlParameter[]
-                {
-                    new MySqlParameter("@id", id)
-                };
-
-                return DatabaseConnection.ExecuteQuery(query, parameters) > 0;
-            }
-            catch (Exception ex)
-            {
                 MessageBox.Show($"Error deleting user: {ex.Message}", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
+            }
+            finally
+            {
+                // Tutup connection
+                if (connection != null)
+                {
+                    if (connection.State == ConnectionState.Open)
+                    {
+                        connection.Close();
+                    }
+                    connection.Dispose();
+                }
+            }
+        }
+
+        // ============================================
+        // HELPER: Get Client IP Address
+        // ============================================
+        private string GetClientIpAddress()
+        {
+            try
+            {
+                string hostName = System.Net.Dns.GetHostName();
+                var addresses = System.Net.Dns.GetHostAddresses(hostName);
+
+                foreach (var address in addresses)
+                {
+                    if (address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                    {
+                        return address.ToString();
+                    }
+                }
+
+                return "127.0.0.1";
+            }
+            catch
+            {
+                return "127.0.0.1";
             }
         }
 
@@ -419,7 +504,17 @@ namespace App_Rental_Proyek.UserControls.Admin
 
         private void UpdatePaginationInfo(int totalFiltered)
         {
-            lbTotalUser.Text = $"Total: {totalFiltered} users";
+            // ✅ Tampilkan info user yang login jika ada
+            if (SessionManager.IsLoggedIn)
+            {
+                string currentUser = SessionManager.CurrentUser?.Nama ?? "Unknown";
+                lbTotalUser.Text = $"User: {currentUser} | Total: {totalFiltered} users";
+            }
+            else
+            {
+                lbTotalUser.Text = $"⚠️ Session tidak ditemukan | Total: {totalFiltered} users";
+            }
+
             lbPetunjukHalaman.Text = $"Halaman {_currentPage} dari {_totalPages}";
 
             btnPrev.Enabled = _currentPage > 1;
@@ -470,35 +565,49 @@ namespace App_Rental_Proyek.UserControls.Admin
         // ============================================
         private void Guna2DataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            // Check if the click is on a valid row and column
-            if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
+            try
             {
-                // Check if clicked on Action column
-                if (guna2DataGridView1.Columns[e.ColumnIndex].Name == "Action")
+                // Check if the click is on a valid row and column
+                if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
                 {
-                    // Get the User ID from the row
-                    var userId = Convert.ToUInt64(guna2DataGridView1.Rows[e.RowIndex].Cells["Id"].Value);
-
-                    // Get the click position relative to the cell
-                    Rectangle cellRect = guna2DataGridView1.GetCellDisplayRectangle(e.ColumnIndex, e.RowIndex, false);
-                    Point clickPoint = guna2DataGridView1.PointToClient(Control.MousePosition);
-
-                    // Calculate click position within the cell
-                    int clickX = clickPoint.X - cellRect.X;
-                    int cellWidth = guna2DataGridView1.Columns[e.ColumnIndex].Width;
-
-                    // Determine which button was clicked based on X position
-                    if (clickX < cellWidth / 2)
+                    // Check if clicked on Action column
+                    if (guna2DataGridView1.Columns[e.ColumnIndex].Name == "Action")
                     {
-                        // Left side - Edit button
-                        ShowEditUserForm(userId);
-                    }
-                    else
-                    {
-                        // Right side - Delete button
-                        DeleteUser(userId);
+                        // Get the User ID from the row
+                        var idCell = guna2DataGridView1.Rows[e.RowIndex].Cells["Id"];
+                        if (idCell.Value == null || idCell.Value == DBNull.Value)
+                        {
+                            return;
+                        }
+
+                        var userId = Convert.ToUInt64(idCell.Value);
+
+                        // Get the click position relative to the cell
+                        Rectangle cellRect = guna2DataGridView1.GetCellDisplayRectangle(e.ColumnIndex, e.RowIndex, false);
+                        Point clickPoint = guna2DataGridView1.PointToClient(Control.MousePosition);
+
+                        // Calculate click position within the cell
+                        int clickX = clickPoint.X - cellRect.X;
+                        int cellWidth = guna2DataGridView1.Columns[e.ColumnIndex].Width;
+
+                        // Determine which button was clicked based on X position
+                        if (clickX < cellWidth / 2)
+                        {
+                            // Left side - Edit button
+                            ShowEditUserForm(userId);
+                        }
+                        else
+                        {
+                            // Right side - Delete button
+                            DeleteUser(userId);
+                        }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex.Message}", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -535,9 +644,14 @@ namespace App_Rental_Proyek.UserControls.Admin
 
         private void ShowAddUserForm()
         {
-            // Use your CreateUser form
             using (var createUserForm = new CreateUser())
             {
+                // ✅ Kirim user dari session (opsional, untuk fallback)
+                if (SessionManager.IsLoggedIn)
+                {
+                    createUserForm.Tag = SessionManager.CurrentUser;
+                }
+
                 var result = createUserForm.ShowDialog();
 
                 if (result == DialogResult.OK)
@@ -552,7 +666,23 @@ namespace App_Rental_Proyek.UserControls.Admin
         // ============================================
         private void ShowEditUserForm(ulong userId)
         {
-            // Use using statement for automatic disposal
+            // ✅ Cek user mencoba mengedit diri sendiri
+            if (SessionManager.IsLoggedIn && SessionManager.CurrentUser.Id == userId)
+            {
+                DialogResult result = MessageBox.Show(
+                    "Anda akan mengedit akun Anda sendiri.\n\n" +
+                    "Perubahan pada role atau status dapat mempengaruhi akses Anda.\n" +
+                    "Lanjutkan?",
+                    "Konfirmasi Edit Akun Sendiri",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning);
+
+                if (result != DialogResult.Yes)
+                {
+                    return;
+                }
+            }
+
             using (var editUserForm = new App_Rental_Proyek.UserControls.Admin.UserManagement.EditUser(userId))
             {
                 try
@@ -565,7 +695,7 @@ namespace App_Rental_Proyek.UserControls.Admin
 
                         MessageBox.Show(errorMsg, "Error",
                             MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return; // Form will be disposed by using block
+                        return;
                     }
 
                     // Show the form as a dialog
@@ -576,17 +706,18 @@ namespace App_Rental_Proyek.UserControls.Admin
                     {
                         LoadUsers();
                     }
-                    // else - user cancelled, no action needed
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show($"Error membuka form Edit User: {ex.Message}",
                         "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-                // Form is automatically disposed when leaving the using block
             }
         }
 
+        // ============================================
+        // DELETE USER - Combined with Activity Log
+        // ============================================
         private void DeleteUser(ulong userId)
         {
             if (_allUsers == null) return;
@@ -594,8 +725,17 @@ namespace App_Rental_Proyek.UserControls.Admin
             var user = _allUsers.Find(u => u.Id == userId);
             if (user != null)
             {
+                // ✅ Cek user mencoba menghapus dirinya sendiri
+                if (SessionManager.IsLoggedIn && SessionManager.CurrentUser.Id == userId)
+                {
+                    MessageBox.Show("Anda tidak dapat menghapus akun Anda sendiri!",
+                        "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
                 DialogResult result = MessageBox.Show(
-                    $"Apakah Anda yakin ingin menghapus user '{user.Nama}'?",
+                    $"Apakah Anda yakin ingin menghapus user '{user.Nama}'?\n\n" +
+                    "Aktivitas ini akan dicatat dalam log sistem.",
                     "Konfirmasi Hapus",
                     MessageBoxButtons.YesNo,
                     MessageBoxIcon.Warning);
@@ -604,11 +744,22 @@ namespace App_Rental_Proyek.UserControls.Admin
                 {
                     try
                     {
-                        if (DeleteUserFromDatabase(userId))
+                        // Panggil method yang menggabungkan delete dan log
+                        if (DeleteUserWithActivityLog(userId, user))
                         {
-                            MessageBox.Show("User berhasil dihapus!", "Sukses",
-                                MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show("User berhasil dihapus!",
+                                "Sukses",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Information);
+
                             LoadUsers();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Gagal menghapus user!",
+                                "Error",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
                         }
                     }
                     catch (Exception ex)

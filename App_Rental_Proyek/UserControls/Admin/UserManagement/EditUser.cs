@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using MySql.Data.MySqlClient;
 using App_Rental_Proyek.Config;
 using App_Rental_Proyek.Model;
+using App_Rental_Proyek.Helper;
 
 namespace App_Rental_Proyek.UserControls.Admin.UserManagement
 {
@@ -20,6 +21,9 @@ namespace App_Rental_Proyek.UserControls.Admin.UserManagement
         private string selectedRole = "user";
         private bool _isClosing = false;
 
+        // ❌ HAPUS field ini - tidak perlu lagi
+        // private UserModel _currentLoggedInUser;
+
         public EditUser(ulong userId)
         {
             InitializeComponent();
@@ -31,6 +35,15 @@ namespace App_Rental_Proyek.UserControls.Admin.UserManagement
         private void EditUser_Load(object sender, EventArgs e)
         {
             SetupDefaultValues();
+
+            // ✅ Gunakan SessionManager untuk cek session
+            if (!SessionManager.IsLoggedIn)
+            {
+                System.Diagnostics.Debug.WriteLine("Warning: EditUser - Tidak ada user login!");
+                // Tampilkan peringatan tapi tetap lanjutkan
+                MessageBox.Show("Session user tidak ditemukan. Aktivitas tidak akan dicatat ke log.",
+                    "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
         #region Initialization Methods
@@ -48,42 +61,19 @@ namespace App_Rental_Proyek.UserControls.Admin.UserManagement
             txtPassword.PlaceholderText = "Kosongkan jika tidak ingin mengubah password";
             txtConfirmPassword.PlaceholderText = "Kosongkan jika tidak ingin mengubah password";
 
-            // Set default values untuk numeric controls
             SetDefaultNumericValues();
         }
 
-        /// <summary>
-        /// Set default values untuk semua numeric controls
-        /// untuk menghindari error "value must be less than 0"
-        /// </summary>
         private void SetDefaultNumericValues()
         {
             try
             {
                 // Cek dan set Guna2ProgressBar jika ada
-                // Jika ada progress bar di form, pastikan nilai tidak 0
-                // Contoh:
                 // if (guna2ProgressBar1 != null)
                 // {
                 //     guna2ProgressBar1.Minimum = 0;
                 //     guna2ProgressBar1.Maximum = 100;
                 //     guna2ProgressBar1.Value = 1; // JANGAN 0!
-                // }
-
-                // Cek dan set Guna2TrackBar jika ada
-                // if (guna2TrackBar1 != null)
-                // {
-                //     guna2TrackBar1.Minimum = 0;
-                //     guna2TrackBar1.Maximum = 10;
-                //     guna2TrackBar1.Value = 1; // JANGAN 0!
-                // }
-
-                // Cek dan set NumericUpDown jika ada
-                // if (numericUpDown1 != null)
-                // {
-                //     numericUpDown1.Minimum = 0;
-                //     numericUpDown1.Maximum = 100;
-                //     numericUpDown1.Value = 1; // JANGAN 0!
                 // }
             }
             catch (Exception ex)
@@ -151,9 +141,7 @@ namespace App_Rental_Proyek.UserControls.Admin.UserManagement
                         UpdatedAt = row["updated_at"] as DateTime?
                     };
 
-                    // Set values dengan safe try-catch
                     SetControlValuesSafely();
-
                     selectedRole = _userData.Role;
                 }
                 else
@@ -177,15 +165,10 @@ namespace App_Rental_Proyek.UserControls.Admin.UserManagement
             }
         }
 
-        /// <summary>
-        /// Set semua nilai kontrol dengan safe try-catch
-        /// untuk mengidentifikasi kontrol mana yang menyebabkan error
-        /// </summary>
         private void SetControlValuesSafely()
         {
             try
             {
-                // Set Guna2TextBox controls
                 SetGuna2TextBoxSafely(txtNamaLengkap, _userData.Nama, "txtNamaLengkap");
                 SetGuna2TextBoxSafely(txtUsername, _userData.Username, "txtUsername");
                 SetGuna2TextBoxSafely(txtEmail, _userData.Email, "txtEmail");
@@ -194,30 +177,15 @@ namespace App_Rental_Proyek.UserControls.Admin.UserManagement
                 SetGuna2TextBoxSafely(txtPassword, "", "txtPassword");
                 SetGuna2TextBoxSafely(txtConfirmPassword, "", "txtConfirmPassword");
 
-                // Set role radio buttons
                 SetRoleSafely();
-
-                // Set status combo box
                 SetStatusComboBoxSafely();
-
-                // ============================================
-                // PERHATIAN: Jika ada ProgressBar/TrackBar/NumericUpDown
-                // tambahkan penanganan di sini
-                // ============================================
-                // SetNumericControlSafely(guna2ProgressBar1, 1, "guna2ProgressBar1");
-                // SetNumericControlSafely(guna2TrackBar1, 1, "guna2TrackBar1");
-                // SetNumericControlSafely(numericUpDown1, 1, "numericUpDown1");
             }
             catch (Exception ex)
             {
-                // Jika ada error di sini, lempar ke atas untuk ditangani
                 throw new Exception($"Error setting control values: {ex.Message}", ex);
             }
         }
 
-        /// <summary>
-        /// Set Guna2TextBox dengan safe try-catch
-        /// </summary>
         private void SetGuna2TextBoxSafely(Guna.UI2.WinForms.Guna2TextBox control, string value, string controlName)
         {
             try
@@ -234,9 +202,6 @@ namespace App_Rental_Proyek.UserControls.Admin.UserManagement
             }
         }
 
-        /// <summary>
-        /// Set TextBox biasa dengan safe try-catch
-        /// </summary>
         private void SetTextBoxSafely(TextBox control, string value, string controlName)
         {
             try
@@ -253,22 +218,17 @@ namespace App_Rental_Proyek.UserControls.Admin.UserManagement
             }
         }
 
-        /// <summary>
-        /// Set numeric control dengan safe try-catch
-        /// </summary>
         private void SetNumericControlSafely(dynamic control, int value, string controlName)
         {
             try
             {
                 if (control != null)
                 {
-                    // Cek apakah kontrol memiliki properti Minimum, Maximum, Value
                     try
                     {
-                        // Pastikan value tidak 0 jika Minimum = 0
                         if (value == 0 && control.Minimum == 0)
                         {
-                            value = 1; // Gunakan nilai minimal 1
+                            value = 1;
                             System.Diagnostics.Debug.WriteLine($"Warning: {controlName} value changed from 0 to 1");
                         }
                         control.Value = value;
@@ -287,9 +247,6 @@ namespace App_Rental_Proyek.UserControls.Admin.UserManagement
             }
         }
 
-        /// <summary>
-        /// Set role radio buttons dengan safe try-catch
-        /// </summary>
         private void SetRoleSafely()
         {
             try
@@ -314,9 +271,6 @@ namespace App_Rental_Proyek.UserControls.Admin.UserManagement
             }
         }
 
-        /// <summary>
-        /// Set status combo box dengan safe try-catch
-        /// </summary>
         private void SetStatusComboBoxSafely()
         {
             try
@@ -558,18 +512,28 @@ namespace App_Rental_Proyek.UserControls.Admin.UserManagement
 
         #endregion
 
-        #region Update User Method
+        #region Update User with Activity Log - Combined Method
 
-        private bool UpdateUserInDatabase(UserModel user, bool updatePassword)
+        /// <summary>
+        /// Update user dan catat aktivitas dalam satu transaction
+        /// </summary>
+        private bool UpdateUserWithActivityLog(UserModel user, bool updatePassword, string oldData)
         {
+            MySqlConnection connection = null;
+            MySqlTransaction transaction = null;
+
             try
             {
-                string query;
-                MySqlParameter[] parameters;
+                connection = DatabaseConnection.GetConnection();
+                connection.Open();
+                transaction = connection.BeginTransaction();
+
+                // 1. Update user di tabel users
+                string updateQuery;
 
                 if (updatePassword)
                 {
-                    query = @"
+                    updateQuery = @"
                         UPDATE users
                         SET nama = @nama,
                             username = @username,
@@ -581,23 +545,10 @@ namespace App_Rental_Proyek.UserControls.Admin.UserManagement
                             status = @status,
                             updated_at = NOW()
                         WHERE id = @id";
-
-                    parameters = new MySqlParameter[]
-                    {
-                        new MySqlParameter("@id", user.Id),
-                        new MySqlParameter("@nama", user.Nama),
-                        new MySqlParameter("@username", user.Username),
-                        new MySqlParameter("@email", user.Email),
-                        new MySqlParameter("@password", user.Password),
-                        new MySqlParameter("@no_telepon", (object)user.NoTelepon ?? DBNull.Value),
-                        new MySqlParameter("@alamat", (object)user.Alamat ?? DBNull.Value),
-                        new MySqlParameter("@role", user.Role),
-                        new MySqlParameter("@status", user.Status)
-                    };
                 }
                 else
                 {
-                    query = @"
+                    updateQuery = @"
                         UPDATE users
                         SET nama = @nama,
                             username = @username,
@@ -608,27 +559,130 @@ namespace App_Rental_Proyek.UserControls.Admin.UserManagement
                             status = @status,
                             updated_at = NOW()
                         WHERE id = @id";
-
-                    parameters = new MySqlParameter[]
-                    {
-                        new MySqlParameter("@id", user.Id),
-                        new MySqlParameter("@nama", user.Nama),
-                        new MySqlParameter("@username", user.Username),
-                        new MySqlParameter("@email", user.Email),
-                        new MySqlParameter("@no_telepon", (object)user.NoTelepon ?? DBNull.Value),
-                        new MySqlParameter("@alamat", (object)user.Alamat ?? DBNull.Value),
-                        new MySqlParameter("@role", user.Role),
-                        new MySqlParameter("@status", user.Status)
-                    };
                 }
 
-                return DatabaseConnection.ExecuteQuery(query, parameters) > 0;
+                using (MySqlCommand updateCmd = new MySqlCommand(updateQuery, connection, transaction))
+                {
+                    updateCmd.Parameters.AddWithValue("@id", user.Id);
+                    updateCmd.Parameters.AddWithValue("@nama", user.Nama);
+                    updateCmd.Parameters.AddWithValue("@username", user.Username);
+                    updateCmd.Parameters.AddWithValue("@email", user.Email);
+
+                    if (updatePassword)
+                    {
+                        updateCmd.Parameters.AddWithValue("@password", user.Password);
+                    }
+
+                    updateCmd.Parameters.AddWithValue("@no_telepon", (object)user.NoTelepon ?? DBNull.Value);
+                    updateCmd.Parameters.AddWithValue("@alamat", (object)user.Alamat ?? DBNull.Value);
+                    updateCmd.Parameters.AddWithValue("@role", user.Role);
+                    updateCmd.Parameters.AddWithValue("@status", user.Status);
+
+                    int updateResult = updateCmd.ExecuteNonQuery();
+
+                    if (updateResult <= 0)
+                    {
+                        transaction.Rollback();
+                        return false;
+                    }
+                }
+
+                // ✅ Gunakan SessionManager untuk mendapatkan user ID
+                ulong currentUserId = SessionManager.GetCurrentUserId();
+
+                // ✅ Jika user tidak login, skip log
+                if (currentUserId == 0)
+                {
+                    transaction.Commit();
+                    return true;
+                }
+
+                // 2. Catat aktivitas update ke activity_logs
+                string logQuery = @"
+                    INSERT INTO activity_logs 
+                    (user_id, aktivitas, modul, referensi_id, ip_address, created_at) 
+                    VALUES 
+                    (@userId, @aktivitas, @modul, @referensiId, @ipAddress, NOW())";
+
+                using (MySqlCommand logCmd = new MySqlCommand(logQuery, connection, transaction))
+                {
+                    string ipAddress = GetClientIpAddress();
+
+                    string activityDescription;
+                    if (updatePassword)
+                    {
+                        activityDescription = $"Mengupdate user '{user.Username}' (dengan perubahan password)";
+                    }
+                    else
+                    {
+                        activityDescription = $"Mengupdate user '{user.Username}'";
+                    }
+
+                    logCmd.Parameters.AddWithValue("@userId", currentUserId);
+                    logCmd.Parameters.AddWithValue("@aktivitas", activityDescription);
+                    logCmd.Parameters.AddWithValue("@modul", "User Management");
+                    logCmd.Parameters.AddWithValue("@referensiId", user.Id);
+                    logCmd.Parameters.AddWithValue("@ipAddress", ipAddress);
+
+                    int logResult = logCmd.ExecuteNonQuery();
+
+                    if (logResult <= 0)
+                    {
+                        transaction.Rollback();
+                        return false;
+                    }
+                }
+
+                transaction.Commit();
+                return true;
             }
             catch (Exception ex)
             {
+                if (transaction != null)
+                {
+                    try { transaction.Rollback(); } catch { }
+                }
+
                 MessageBox.Show($"Error updating user: {ex.Message}", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
+            }
+            finally
+            {
+                if (connection != null)
+                {
+                    if (connection.State == ConnectionState.Open)
+                    {
+                        connection.Close();
+                    }
+                    connection.Dispose();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Get Client IP Address
+        /// </summary>
+        private string GetClientIpAddress()
+        {
+            try
+            {
+                string hostName = System.Net.Dns.GetHostName();
+                var addresses = System.Net.Dns.GetHostAddresses(hostName);
+
+                foreach (var address in addresses)
+                {
+                    if (address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                    {
+                        return address.ToString();
+                    }
+                }
+
+                return "127.0.0.1";
+            }
+            catch
+            {
+                return "127.0.0.1";
             }
         }
 
@@ -674,6 +728,10 @@ namespace App_Rental_Proyek.UserControls.Admin.UserManagement
                 string password = updatePassword ? txtPassword.Text : _userData.Password;
                 string status = guna2ComboBox1.SelectedItem?.ToString() ?? "aktif";
 
+                // Simpan data lama untuk activity log
+                string oldUsername = _userData.Username;
+
+                // Update data user
                 _userData.Nama = txtNamaLengkap.Text.Trim();
                 _userData.Username = txtUsername.Text.Trim();
                 _userData.Email = txtEmail.Text.Trim();
@@ -683,7 +741,7 @@ namespace App_Rental_Proyek.UserControls.Admin.UserManagement
                 _userData.Role = selectedRole;
                 _userData.Status = status;
 
-                if (UpdateUserInDatabase(_userData, updatePassword))
+                if (UpdateUserWithActivityLog(_userData, updatePassword, oldUsername))
                 {
                     string message = updatePassword
                         ? "User berhasil diupdate dengan password baru!"
@@ -692,7 +750,6 @@ namespace App_Rental_Proyek.UserControls.Admin.UserManagement
                     MessageBox.Show(message,
                         "Sukses", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                    // IMPORTANT: Set DialogResult FIRST, then close
                     this.DialogResult = DialogResult.OK;
                     this.Close();
                 }
@@ -756,7 +813,6 @@ namespace App_Rental_Proyek.UserControls.Admin.UserManagement
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            // Ensure DialogResult is set if form is closing without explicit result
             if (this.DialogResult == DialogResult.None)
             {
                 this.DialogResult = DialogResult.Cancel;

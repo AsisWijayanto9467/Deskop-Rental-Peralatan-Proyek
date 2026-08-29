@@ -65,6 +65,7 @@ namespace App_Rental_Proyek
 
             if (user != null)
             {
+                SessionManager.SetCurrentUser(user);
                 OpenDashboardByRole(user);
             }
             else

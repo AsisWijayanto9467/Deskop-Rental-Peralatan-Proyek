@@ -140,22 +140,19 @@ namespace App_Rental_Proyek
 
         private void ShowPengembalian()
         {
-            // Ganti dengan UserControl Pengembalian yang sesuai
-            // ShowControl(new UserControls.Pengembalian());
+            ShowControl(new UserControls.Admin.Pengembalian.PengembalianList());
             SetActiveButton(btnPengembalian);
         }
 
         private void ShowActivityLog()
         {
-            // Ganti dengan UserControl ActivityLog yang sesuai
-            // ShowControl(new UserControls.ActivityLog());
+            ShowControl(new UserControls.Admin.ActivityLog.ActivityLogList());
             SetActiveButton(btnActivityLog);
         }
 
         private void ShowDenda()
         {
-            // Ganti dengan UserControl Denda yang sesuai
-            // ShowControl(new UserControls.Denda());
+            ShowControl(new UserControls.Admin.Denda.DendaList());
             SetActiveButton(btnDenda);
         }
 
@@ -222,6 +219,8 @@ namespace App_Rental_Proyek
 
             if (result == DialogResult.Yes)
             {
+                Helper.Session.Clear();
+
                 Login loginForm = new Login();
                 loginForm.Show();
                 this.Close();

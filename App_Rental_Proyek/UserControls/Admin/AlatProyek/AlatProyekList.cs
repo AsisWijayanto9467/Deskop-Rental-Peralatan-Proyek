@@ -75,6 +75,7 @@ namespace App_Rental_Proyek.UserControls.Admin
 
             guna2DataGridView1.CellPainting += Guna2DataGridView1_CellPainting;
             guna2DataGridView1.CellClick += Guna2DataGridView1_CellClick;
+            guna2DataGridView1.CellFormatting += Guna2DataGridView1_CellFormatting;
             guna2DataGridView1.CellContentClick -= guna2DataGridView1_CellContentClick;
         }
 
@@ -309,7 +310,7 @@ namespace App_Rental_Proyek.UserControls.Admin
                     a.Stok,
                     a.StokTersedia,
                     FormatKondisi(a.Kondisi),
-                    FormatStatus(a.Status),
+                    a.Status,
                     ""
                 );
 
@@ -342,6 +343,17 @@ namespace App_Rental_Proyek.UserControls.Admin
                 case "maintenance": return "Maintenance";
                 case "tidak_aktif": return "Tidak Aktif";
                 default: return "Tersedia";
+            }
+        }
+
+        private void Guna2DataGridView1_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (e.RowIndex >= 0 &&
+                guna2DataGridView1.Columns[e.ColumnIndex].Name == "Status" &&
+                e.Value != null)
+            {
+                e.Value = FormatStatus(e.Value.ToString());
+                e.FormattingApplied = true;
             }
         }
 
@@ -417,7 +429,7 @@ namespace App_Rental_Proyek.UserControls.Admin
                 Rectangle cellRect = guna2DataGridView1.GetCellDisplayRectangle(e.ColumnIndex, e.RowIndex, false);
                 Point clickPoint = guna2DataGridView1.PointToClient(Control.MousePosition);
                 int clickX = clickPoint.X - cellRect.X;
-                int quarterWidth = guna2DataGridView1.Columns[e.ColumnIndex].Width / 4;
+                int quarterWidth = cellRect.Width / 4;
 
                 if (clickX < quarterWidth)
                 {
@@ -551,7 +563,7 @@ namespace App_Rental_Proyek.UserControls.Admin
             {
                 if (ToggleStatusAlat(alatId, newStatus))
                 {
-                    MessageBox.Show($"Alat berhasil di{actionText}!", "Sukses",
+                    MessageBox.Show($"Alat berhasil {(newStatus == "tidak_aktif" ? "dinonaktifkan" : "diaktifkan")}!", "Sukses",
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
                     LoadAlat();
                 }
