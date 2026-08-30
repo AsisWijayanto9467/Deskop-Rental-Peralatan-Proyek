@@ -1,5 +1,6 @@
 using App_Rental_Proyek.Config;
 using App_Rental_Proyek.Model;
+using App_Rental_Proyek.Helper;
 using MySql.Data.MySqlClient;
 using System;
 using System.Data;
@@ -9,6 +10,8 @@ namespace App_Rental_Proyek.UserControls.Admin.AlatProyek
 {
     public partial class CreateAlatProyek : Form
     {
+        private string _gambarSourcePath;
+
         public CreateAlatProyek()
         {
             InitializeComponent();
@@ -141,35 +144,127 @@ namespace App_Rental_Proyek.UserControls.Admin.AlatProyek
 
         private bool CreateAlatInDatabase(AlatProyekModel alat)
         {
+            MySqlConnection connection = null;
+            MySqlTransaction transaction = null;
+
             try
             {
-                string query = @"
+                connection = DatabaseConnection.GetConnection();
+                connection.Open();
+                transaction = connection.BeginTransaction();
+
+                // 1. Insert alat proyek ke tabel alat_proyeks
+                string insertQuery = @"
                     INSERT INTO alat_proyeks (kategori_id, lokasi_id, kode_alat, nama_alat, deskripsi,
-                        harga_sewa_harian, stok, stok_tersedia, kondisi, status, created_at, updated_at)
+                        harga_sewa_harian, stok, stok_tersedia, kondisi, status, gambar, created_at, updated_at)
                     VALUES (@kategori_id, @lokasi_id, @kode_alat, @nama_alat, @deskripsi,
-                        @harga, @stok, @stok_tersedia, @kondisi, @status, NOW(), NOW())";
+                        @harga, @stok, @stok_tersedia, @kondisi, @status, @gambar, NOW(), NOW());
+                    SELECT LAST_INSERT_ID();";
 
-                MySqlParameter[] parameters = new MySqlParameter[]
+                ulong newAlatId;
+
+                using (MySqlCommand insertCmd = new MySqlCommand(insertQuery, connection, transaction))
                 {
-                    new MySqlParameter("@kategori_id", alat.KategoriId),
-                    new MySqlParameter("@lokasi_id", alat.LokasiId),
-                    new MySqlParameter("@kode_alat", alat.KodeAlat),
-                    new MySqlParameter("@nama_alat", alat.NamaAlat),
-                    new MySqlParameter("@deskripsi", (object)alat.Deskripsi ?? DBNull.Value),
-                    new MySqlParameter("@harga", alat.HargaSewaHarian),
-                    new MySqlParameter("@stok", alat.Stok),
-                    new MySqlParameter("@stok_tersedia", alat.StokTersedia),
-                    new MySqlParameter("@kondisi", alat.Kondisi),
-                    new MySqlParameter("@status", alat.Status)
-                };
+                    insertCmd.Parameters.AddWithValue("@kategori_id", alat.KategoriId);
+                    insertCmd.Parameters.AddWithValue("@lokasi_id", alat.LokasiId);
+                    insertCmd.Parameters.AddWithValue("@kode_alat", alat.KodeAlat);
+                    insertCmd.Parameters.AddWithValue("@nama_alat", alat.NamaAlat);
+                    insertCmd.Parameters.AddWithValue("@deskripsi", (object)alat.Deskripsi ?? DBNull.Value);
+                    insertCmd.Parameters.AddWithValue("@harga", alat.HargaSewaHarian);
+                    insertCmd.Parameters.AddWithValue("@stok", alat.Stok);
+                    insertCmd.Parameters.AddWithValue("@stok_tersedia", alat.StokTersedia);
+                    insertCmd.Parameters.AddWithValue("@kondisi", alat.Kondisi);
+                    insertCmd.Parameters.AddWithValue("@status", alat.Status);
+                    insertCmd.Parameters.AddWithValue("@gambar", (object)alat.Gambar ?? DBNull.Value);
 
-                return DatabaseConnection.ExecuteQuery(query, parameters) > 0;
+                    newAlatId = Convert.ToUInt64(insertCmd.ExecuteScalar());
+
+                    if (newAlatId == 0)
+                    {
+                        transaction.Rollback();
+                        return false;
+                    }
+                }
+
+                // 2. Catat aktivitas penambahan alat proyek ke activity_logs
+                ulong currentUserId = SessionManager.GetCurrentUserId();
+
+                if (currentUserId > 0)
+                {
+                    string logQuery = @"
+                        INSERT INTO activity_logs
+                        (user_id, aktivitas, modul, referensi_id, ip_address, created_at)
+                        VALUES
+                        (@userId, @aktivitas, @modul, @referensiId, @ipAddress, NOW())";
+
+                    using (MySqlCommand logCmd = new MySqlCommand(logQuery, connection, transaction))
+                    {
+                        string activityDescription = $"Menambah alat proyek baru '{alat.NamaAlat}' (kode {alat.KodeAlat}) dengan status {alat.Status}";
+
+                        logCmd.Parameters.AddWithValue("@userId", currentUserId);
+                        logCmd.Parameters.AddWithValue("@aktivitas", activityDescription);
+                        logCmd.Parameters.AddWithValue("@modul", "Alat Proyek");
+                        logCmd.Parameters.AddWithValue("@referensiId", newAlatId);
+                        logCmd.Parameters.AddWithValue("@ipAddress", GetClientIpAddress());
+
+                        int logResult = logCmd.ExecuteNonQuery();
+
+                        if (logResult <= 0)
+                        {
+                            transaction.Rollback();
+                            return false;
+                        }
+                    }
+                }
+
+                transaction.Commit();
+                return true;
             }
             catch (Exception ex)
             {
+                if (transaction != null)
+                {
+                    try { transaction.Rollback(); }
+                    catch { }
+                }
+
                 MessageBox.Show($"Error menambahkan alat: {ex.Message}", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
+            }
+            finally
+            {
+                if (connection != null)
+                {
+                    if (connection.State == ConnectionState.Open)
+                    {
+                        connection.Close();
+                    }
+                    connection.Dispose();
+                }
+            }
+        }
+
+        private string GetClientIpAddress()
+        {
+            try
+            {
+                string hostName = System.Net.Dns.GetHostName();
+                var addresses = System.Net.Dns.GetHostAddresses(hostName);
+
+                foreach (var address in addresses)
+                {
+                    if (address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                    {
+                        return address.ToString();
+                    }
+                }
+
+                return "127.0.0.1";
+            }
+            catch
+            {
+                return "127.0.0.1";
             }
         }
 
@@ -223,6 +318,8 @@ namespace App_Rental_Proyek.UserControls.Admin.AlatProyek
                 string status = cbStatus.SelectedItem?.ToString() ?? "tersedia";
                 string deskripsi = txtDeskripsi.Text.Trim();
 
+                string savedGambar = SaveSelectedGambar(kode);
+
                 var alat = new AlatProyekModel
                 {
                     KategoriId = kategoriId,
@@ -234,7 +331,8 @@ namespace App_Rental_Proyek.UserControls.Admin.AlatProyek
                     Stok = stok,
                     StokTersedia = stok,
                     Kondisi = kondisi,
-                    Status = status
+                    Status = status,
+                    Gambar = savedGambar
                 };
 
                 if (CreateAlatInDatabase(alat))
@@ -246,6 +344,10 @@ namespace App_Rental_Proyek.UserControls.Admin.AlatProyek
                 }
                 else
                 {
+                    if (!string.IsNullOrEmpty(savedGambar))
+                    {
+                        AlatProyekGambarHelper.DeleteImageFile(savedGambar);
+                    }
                     MessageBox.Show("Gagal menambahkan alat. Silakan coba lagi.",
                         "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
@@ -255,6 +357,50 @@ namespace App_Rental_Proyek.UserControls.Admin.AlatProyek
                 MessageBox.Show($"Terjadi kesalahan: {ex.Message}",
                     "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void btnPilihGambar_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog ofd = new OpenFileDialog())
+            {
+                ofd.Title = "Pilih Gambar Alat";
+                ofd.Filter = "File Gambar|*.jpg;*.jpeg;*.png;*.bmp;*.gif;*.webp|Semua File|*.*";
+                ofd.CheckFileExists = true;
+
+                if (ofd.ShowDialog() == DialogResult.OK)
+                {
+                    if (!AlatProyekGambarHelper.IsImage(ofd.FileName))
+                    {
+                        MessageBox.Show("File yang dipilih bukan gambar yang valid!",
+                            "Validasi Gagal", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+
+                    _gambarSourcePath = ofd.FileName;
+                    try
+                    {
+                        picGambar.Image?.Dispose();
+                        picGambar.Image = System.Drawing.Image.FromFile(ofd.FileName);
+                    }
+                    catch
+                    {
+                        picGambar.Image = null;
+                    }
+                }
+            }
+        }
+
+        private void btnHapusGambar_Click(object sender, EventArgs e)
+        {
+            _gambarSourcePath = null;
+            picGambar.Image?.Dispose();
+            picGambar.Image = null;
+        }
+
+        private string SaveSelectedGambar(string baseName)
+        {
+            if (string.IsNullOrWhiteSpace(_gambarSourcePath)) return null;
+            return AlatProyekGambarHelper.SaveImageFile(_gambarSourcePath, baseName);
         }
 
         private void btnKembali_Click(object sender, EventArgs e)

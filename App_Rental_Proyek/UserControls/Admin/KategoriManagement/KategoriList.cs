@@ -382,14 +382,7 @@ namespace App_Rental_Proyek.UserControls.Admin
             {
                 try
                 {
-                    string query = "UPDATE kategoris SET status = @status, updated_at = NOW() WHERE id = @id";
-                    MySqlParameter[] parameters = new MySqlParameter[]
-                    {
-                        new MySqlParameter("@status", newStatus),
-                        new MySqlParameter("@id", kategoriId)
-                    };
-
-                    if (DatabaseConnection.ExecuteQuery(query, parameters) > 0)
+                    if (UpdateStatusWithActivityLog(kategoriId, newStatus, actionText, kategori?.NamaKategori))
                     {
                         MessageBox.Show($"Kategori berhasil di{actionText}!", "Sukses",
                             MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -405,6 +398,94 @@ namespace App_Rental_Proyek.UserControls.Admin
                 {
                     MessageBox.Show($"Error: {ex.Message}", "Error",
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private bool UpdateStatusWithActivityLog(ulong kategoriId, string newStatus, string actionText, string namaKategori)
+        {
+            MySqlConnection connection = null;
+            MySqlTransaction transaction = null;
+
+            try
+            {
+                connection = DatabaseConnection.GetConnection();
+                connection.Open();
+                transaction = connection.BeginTransaction();
+
+                string updateQuery = "UPDATE kategoris SET status = @status, updated_at = NOW() WHERE id = @id";
+
+                int affected;
+
+                using (MySqlCommand updateCmd = new MySqlCommand(updateQuery, connection, transaction))
+                {
+                    updateCmd.Parameters.AddWithValue("@status", newStatus);
+                    updateCmd.Parameters.AddWithValue("@id", kategoriId);
+
+                    affected = updateCmd.ExecuteNonQuery();
+
+                    if (affected <= 0)
+                    {
+                        transaction.Rollback();
+                        return false;
+                    }
+                }
+
+                ulong currentUserId = SessionManager.GetCurrentUserId();
+
+                if (currentUserId > 0)
+                {
+                    string logQuery = @"
+                        INSERT INTO activity_logs
+                        (user_id, aktivitas, modul, referensi_id, ip_address, created_at)
+                        VALUES
+                        (@userId, @aktivitas, @modul, @referensiId, @ipAddress, NOW())";
+
+                    using (MySqlCommand logCmd = new MySqlCommand(logQuery, connection, transaction))
+                    {
+                        string mesian = newStatus == "nonaktif" ? "nonaktif" : "aktif";
+                        string activityDescription = $"Meng{actionText} kategori '{namaKategori}' (status menjadi {mesian})";
+
+                        logCmd.Parameters.AddWithValue("@userId", currentUserId);
+                        logCmd.Parameters.AddWithValue("@aktivitas", activityDescription);
+                        logCmd.Parameters.AddWithValue("@modul", "Kategori");
+                        logCmd.Parameters.AddWithValue("@referensiId", kategoriId);
+                        logCmd.Parameters.AddWithValue("@ipAddress", GetClientIpAddress());
+
+                        int logResult = logCmd.ExecuteNonQuery();
+
+                        if (logResult <= 0)
+                        {
+                            transaction.Rollback();
+                            return false;
+                        }
+                    }
+                }
+
+                transaction.Commit();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                if (transaction != null)
+                {
+                    try { transaction.Rollback(); }
+                    catch { }
+                }
+
+                MessageBox.Show($"Error: {ex.Message}", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            finally
+            {
+                if (connection != null)
+                {
+                    if (connection.State == ConnectionState.Open)
+                    {
+                        connection.Close();
+                    }
+                    connection.Dispose();
                 }
             }
         }
@@ -431,13 +512,7 @@ namespace App_Rental_Proyek.UserControls.Admin
             {
                 try
                 {
-                    string query = "DELETE FROM kategoris WHERE id = @id";
-                    MySqlParameter[] parameters = new MySqlParameter[]
-                    {
-                        new MySqlParameter("@id", kategoriId)
-                    };
-
-                    if (DatabaseConnection.ExecuteQuery(query, parameters) > 0)
+                    if (DeleteKategoriWithActivityLog(kategoriId, kategori?.NamaKategori))
                     {
                         MessageBox.Show("Kategori berhasil dihapus!", "Sukses",
                             MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -454,6 +529,115 @@ namespace App_Rental_Proyek.UserControls.Admin
                     MessageBox.Show($"Error: {ex.Message}", "Error",
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+            }
+        }
+
+        private bool DeleteKategoriWithActivityLog(ulong kategoriId, string namaKategori)
+        {
+            MySqlConnection connection = null;
+            MySqlTransaction transaction = null;
+
+            try
+            {
+                connection = DatabaseConnection.GetConnection();
+                connection.Open();
+                transaction = connection.BeginTransaction();
+
+                string deleteQuery = "DELETE FROM kategoris WHERE id = @id";
+
+                int affected;
+
+                using (MySqlCommand deleteCmd = new MySqlCommand(deleteQuery, connection, transaction))
+                {
+                    deleteCmd.Parameters.AddWithValue("@id", kategoriId);
+
+                    affected = deleteCmd.ExecuteNonQuery();
+
+                    if (affected <= 0)
+                    {
+                        transaction.Rollback();
+                        return false;
+                    }
+                }
+
+                ulong currentUserId = SessionManager.GetCurrentUserId();
+
+                if (currentUserId > 0)
+                {
+                    string logQuery = @"
+                        INSERT INTO activity_logs
+                        (user_id, aktivitas, modul, referensi_id, ip_address, created_at)
+                        VALUES
+                        (@userId, @aktivitas, @modul, @referensiId, @ipAddress, NOW())";
+
+                    using (MySqlCommand logCmd = new MySqlCommand(logQuery, connection, transaction))
+                    {
+                        string activityDescription = $"Menghapus kategori '{namaKategori}'";
+
+                        logCmd.Parameters.AddWithValue("@userId", currentUserId);
+                        logCmd.Parameters.AddWithValue("@aktivitas", activityDescription);
+                        logCmd.Parameters.AddWithValue("@modul", "Kategori");
+                        logCmd.Parameters.AddWithValue("@referensiId", kategoriId);
+                        logCmd.Parameters.AddWithValue("@ipAddress", GetClientIpAddress());
+
+                        int logResult = logCmd.ExecuteNonQuery();
+
+                        if (logResult <= 0)
+                        {
+                            transaction.Rollback();
+                            return false;
+                        }
+                    }
+                }
+
+                transaction.Commit();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                if (transaction != null)
+                {
+                    try { transaction.Rollback(); }
+                    catch { }
+                }
+
+                MessageBox.Show($"Error: {ex.Message}", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            finally
+            {
+                if (connection != null)
+                {
+                    if (connection.State == ConnectionState.Open)
+                    {
+                        connection.Close();
+                    }
+                    connection.Dispose();
+                }
+            }
+        }
+
+        private string GetClientIpAddress()
+        {
+            try
+            {
+                string hostName = System.Net.Dns.GetHostName();
+                var addresses = System.Net.Dns.GetHostAddresses(hostName);
+
+                foreach (var address in addresses)
+                {
+                    if (address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                    {
+                        return address.ToString();
+                    }
+                }
+
+                return "127.0.0.1";
+            }
+            catch
+            {
+                return "127.0.0.1";
             }
         }
     }

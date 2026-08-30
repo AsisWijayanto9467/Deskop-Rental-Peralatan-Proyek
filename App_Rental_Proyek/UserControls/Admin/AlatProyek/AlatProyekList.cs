@@ -1,4 +1,5 @@
 using App_Rental_Proyek.Config;
+using App_Rental_Proyek.Helper;
 using App_Rental_Proyek.Model;
 using App_Rental_Proyek.UserControls.Admin.AlatProyek;
 using Guna.UI2.WinForms;
@@ -40,6 +41,15 @@ namespace App_Rental_Proyek.UserControls.Admin
         private void InitializeGridView()
         {
             guna2DataGridView1.Columns.Clear();
+
+            DataGridViewImageColumn colGambar = new DataGridViewImageColumn();
+            colGambar.Name = "Gambar";
+            colGambar.HeaderText = "Gambar";
+            colGambar.ImageLayout = DataGridViewImageCellLayout.Zoom;
+            colGambar.Width = 90;
+            colGambar.MinimumWidth = 80;
+            colGambar.FillWeight = 10;
+            guna2DataGridView1.Columns.Add(colGambar);
 
             guna2DataGridView1.Columns.Add("Id", "ID");
             guna2DataGridView1.Columns.Add("Kode", "Kode Alat");
@@ -172,42 +182,201 @@ namespace App_Rental_Proyek.UserControls.Admin
             return list;
         }
 
-        private bool ToggleStatusAlat(ulong id, string newStatus)
+        private bool ToggleStatusAlat(ulong id, string newStatus, string namaAlat)
         {
+            MySqlConnection connection = null;
+            MySqlTransaction transaction = null;
+
             try
             {
+                connection = DatabaseConnection.GetConnection();
+                connection.Open();
+                transaction = connection.BeginTransaction();
+
                 string query = "UPDATE alat_proyeks SET status = @status, updated_at = NOW() WHERE id = @id";
-                MySqlParameter[] parameters = new MySqlParameter[]
+
+                int affected;
+
+                using (MySqlCommand cmd = new MySqlCommand(query, connection, transaction))
                 {
-                    new MySqlParameter("@status", newStatus),
-                    new MySqlParameter("@id", id)
-                };
-                return DatabaseConnection.ExecuteQuery(query, parameters) > 0;
+                    cmd.Parameters.AddWithValue("@status", newStatus);
+                    cmd.Parameters.AddWithValue("@id", id);
+
+                    affected = cmd.ExecuteNonQuery();
+
+                    if (affected <= 0)
+                    {
+                        transaction.Rollback();
+                        return false;
+                    }
+                }
+
+                ulong currentUserId = SessionManager.GetCurrentUserId();
+
+                if (currentUserId > 0)
+                {
+                    string logQuery = @"
+                        INSERT INTO activity_logs
+                        (user_id, aktivitas, modul, referensi_id, ip_address, created_at)
+                        VALUES
+                        (@userId, @aktivitas, @modul, @referensiId, @ipAddress, NOW())";
+
+                    using (MySqlCommand logCmd = new MySqlCommand(logQuery, connection, transaction))
+                    {
+                        bool nonaktif = newStatus == "tidak_aktif";
+                        string actionText = nonaktif ? "menonaktifkan" : "mengaktifkan";
+                        string activityDescription = $"Meng{actionText} alat proyek '{namaAlat}' (status menjadi {newStatus})";
+
+                        logCmd.Parameters.AddWithValue("@userId", currentUserId);
+                        logCmd.Parameters.AddWithValue("@aktivitas", activityDescription);
+                        logCmd.Parameters.AddWithValue("@modul", "Alat Proyek");
+                        logCmd.Parameters.AddWithValue("@referensiId", id);
+                        logCmd.Parameters.AddWithValue("@ipAddress", GetClientIpAddress());
+
+                        int logResult = logCmd.ExecuteNonQuery();
+
+                        if (logResult <= 0)
+                        {
+                            transaction.Rollback();
+                            return false;
+                        }
+                    }
+                }
+
+                transaction.Commit();
+                return true;
             }
             catch (Exception ex)
             {
+                if (transaction != null)
+                {
+                    try { transaction.Rollback(); }
+                    catch { }
+                }
+
                 MessageBox.Show($"Error mengubah status alat: {ex.Message}", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
+            finally
+            {
+                if (connection != null)
+                {
+                    if (connection.State == ConnectionState.Open)
+                    {
+                        connection.Close();
+                    }
+                    connection.Dispose();
+                }
+            }
         }
 
-        private bool DeleteAlat(ulong id)
+        private bool DeleteAlat(ulong id, string namaAlat)
         {
+            MySqlConnection connection = null;
+            MySqlTransaction transaction = null;
+
             try
             {
+                connection = DatabaseConnection.GetConnection();
+                connection.Open();
+                transaction = connection.BeginTransaction();
+
                 string query = "DELETE FROM alat_proyeks WHERE id = @id";
-                MySqlParameter[] parameters = new MySqlParameter[]
+
+                int affected;
+
+                using (MySqlCommand cmd = new MySqlCommand(query, connection, transaction))
                 {
-                    new MySqlParameter("@id", id)
-                };
-                return DatabaseConnection.ExecuteQuery(query, parameters) > 0;
+                    cmd.Parameters.AddWithValue("@id", id);
+
+                    affected = cmd.ExecuteNonQuery();
+
+                    if (affected <= 0)
+                    {
+                        transaction.Rollback();
+                        return false;
+                    }
+                }
+
+                ulong currentUserId = SessionManager.GetCurrentUserId();
+
+                if (currentUserId > 0)
+                {
+                    string logQuery = @"
+                        INSERT INTO activity_logs
+                        (user_id, aktivitas, modul, referensi_id, ip_address, created_at)
+                        VALUES
+                        (@userId, @aktivitas, @modul, @referensiId, @ipAddress, NOW())";
+
+                    using (MySqlCommand logCmd = new MySqlCommand(logQuery, connection, transaction))
+                    {
+                        string activityDescription = $"Menghapus alat proyek '{namaAlat}'";
+
+                        logCmd.Parameters.AddWithValue("@userId", currentUserId);
+                        logCmd.Parameters.AddWithValue("@aktivitas", activityDescription);
+                        logCmd.Parameters.AddWithValue("@modul", "Alat Proyek");
+                        logCmd.Parameters.AddWithValue("@referensiId", id);
+                        logCmd.Parameters.AddWithValue("@ipAddress", GetClientIpAddress());
+
+                        int logResult = logCmd.ExecuteNonQuery();
+
+                        if (logResult <= 0)
+                        {
+                            transaction.Rollback();
+                            return false;
+                        }
+                    }
+                }
+
+                transaction.Commit();
+                return true;
             }
             catch (Exception ex)
             {
+                if (transaction != null)
+                {
+                    try { transaction.Rollback(); }
+                    catch { }
+                }
+
                 MessageBox.Show($"Error menghapus alat: {ex.Message}", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
+            }
+            finally
+            {
+                if (connection != null)
+                {
+                    if (connection.State == ConnectionState.Open)
+                    {
+                        connection.Close();
+                    }
+                    connection.Dispose();
+                }
+            }
+        }
+
+        private string GetClientIpAddress()
+        {
+            try
+            {
+                string hostName = System.Net.Dns.GetHostName();
+                var addresses = System.Net.Dns.GetHostAddresses(hostName);
+
+                foreach (var address in addresses)
+                {
+                    if (address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                    {
+                        return address.ToString();
+                    }
+                }
+
+                return "127.0.0.1";
+            }
+            catch
+            {
+                return "127.0.0.1";
             }
         }
 
@@ -322,6 +491,46 @@ namespace App_Rental_Proyek.UserControls.Admin
                 {
                     guna2DataGridView1.Rows[rowIndex].DefaultCellStyle.ForeColor = Color.FromArgb(230, 126, 34);
                 }
+
+                guna2DataGridView1.Rows[rowIndex].Cells["Gambar"].Value = LoadThumbnail(a.Gambar);
+            }
+        }
+
+        private System.Drawing.Image LoadThumbnail(string gambar)
+        {
+            if (string.IsNullOrWhiteSpace(gambar)) return null;
+            string fullPath = AlatProyekGambarHelper.GetFullPath(gambar);
+            if (string.IsNullOrEmpty(fullPath) || !System.IO.File.Exists(fullPath)) return null;
+
+            try
+            {
+                using (var stream = new System.IO.FileStream(fullPath, System.IO.FileMode.Open, System.IO.FileAccess.Read))
+                {
+                    var img = System.Drawing.Image.FromStream(stream);
+                    return ResizeImage(img, 60, 60);
+                }
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        private System.Drawing.Image ResizeImage(System.Drawing.Image img, int width, int height)
+        {
+            try
+            {
+                var bmp = new System.Drawing.Bitmap(width, height);
+                using (var g = System.Drawing.Graphics.FromImage(bmp))
+                {
+                    g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                    g.DrawImage(img, 0, 0, width, height);
+                }
+                return bmp;
+            }
+            catch
+            {
+                return null;
             }
         }
 
@@ -561,7 +770,7 @@ namespace App_Rental_Proyek.UserControls.Admin
 
             if (result == DialogResult.Yes)
             {
-                if (ToggleStatusAlat(alatId, newStatus))
+                if (ToggleStatusAlat(alatId, newStatus, alat?.NamaAlat))
                 {
                     MessageBox.Show($"Alat berhasil {(newStatus == "tidak_aktif" ? "dinonaktifkan" : "diaktifkan")}!", "Sukses",
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -585,8 +794,13 @@ namespace App_Rental_Proyek.UserControls.Admin
 
             if (result == DialogResult.Yes)
             {
-                if (DeleteAlat(alatId))
+                if (DeleteAlat(alatId, alat?.NamaAlat))
                 {
+                    if (!string.IsNullOrWhiteSpace(alat?.Gambar))
+                    {
+                        AlatProyekGambarHelper.DeleteImageFile(alat.Gambar);
+                    }
+
                     MessageBox.Show("Alat berhasil dihapus!", "Sukses",
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
                     LoadAlat();

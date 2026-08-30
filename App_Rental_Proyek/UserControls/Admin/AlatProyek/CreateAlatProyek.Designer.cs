@@ -57,7 +57,12 @@ namespace App_Rental_Proyek.UserControls.Admin.AlatProyek
             txtDeskripsi = new Guna.UI2.WinForms.Guna2TextBox();
             btnSimpan = new Guna.UI2.WinForms.Guna2Button();
             btnKembali = new Guna.UI2.WinForms.Guna2Button();
+            lblGambar = new Guna.UI2.WinForms.Guna2HtmlLabel();
+            picGambar = new PictureBox();
+            btnPilihGambar = new Guna.UI2.WinForms.Guna2Button();
+            btnHapusGambar = new Guna.UI2.WinForms.Guna2Button();
             guna2Panel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)picGambar).BeginInit();
             SuspendLayout();
             // 
             // guna2Panel2
@@ -388,6 +393,67 @@ namespace App_Rental_Proyek.UserControls.Admin.AlatProyek
             txtDeskripsi.Size = new Size(725, 78);
             txtDeskripsi.TabIndex = 18;
             // 
+            // lblGambar
+            // 
+            lblGambar.BackColor = Color.Transparent;
+            lblGambar.Font = new Font("Segoe UI", 10.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblGambar.Location = new Point(18, 560);
+            lblGambar.Name = "lblGambar";
+            lblGambar.Size = new Size(95, 25);
+            lblGambar.TabIndex = 21;
+            lblGambar.Text = "Gambar Alat :";
+            // 
+            // picGambar
+            // 
+            picGambar.BackColor = Color.FromArgb(244, 244, 244);
+            picGambar.BorderStyle = BorderStyle.FixedSingle;
+            picGambar.Location = new Point(18, 592);
+            picGambar.Name = "picGambar";
+            picGambar.Size = new Size(120, 100);
+            picGambar.SizeMode = PictureBoxSizeMode.Zoom;
+            picGambar.TabIndex = 22;
+            picGambar.TabStop = false;
+            // 
+            // btnPilihGambar
+            // 
+            btnPilihGambar.BorderRadius = 17;
+            btnPilihGambar.BorderThickness = 2;
+            btnPilihGambar.BorderColor = Color.FromArgb(23, 59, 99);
+            btnPilihGambar.CustomizableEdges = customizableEdges5;
+            btnPilihGambar.DisabledState.BorderColor = Color.DarkGray;
+            btnPilihGambar.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
+            btnPilihGambar.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
+            btnPilihGambar.FillColor = Color.FromArgb(23, 59, 99);
+            btnPilihGambar.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnPilihGambar.ForeColor = Color.White;
+            btnPilihGambar.Location = new Point(150, 592);
+            btnPilihGambar.Name = "btnPilihGambar";
+            btnPilihGambar.ShadowDecoration.CustomizableEdges = customizableEdges6;
+            btnPilihGambar.Size = new Size(140, 48);
+            btnPilihGambar.TabIndex = 23;
+            btnPilihGambar.Text = "Pilih Gambar";
+            btnPilihGambar.Click += btnPilihGambar_Click;
+            // 
+            // btnHapusGambar
+            // 
+            btnHapusGambar.BorderColor = Color.FromArgb(231, 76, 60);
+            btnHapusGambar.BorderRadius = 17;
+            btnHapusGambar.BorderThickness = 2;
+            btnHapusGambar.CustomizableEdges = customizableEdges7;
+            btnHapusGambar.DisabledState.BorderColor = Color.DarkGray;
+            btnHapusGambar.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
+            btnHapusGambar.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
+            btnHapusGambar.FillColor = Color.White;
+            btnHapusGambar.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnHapusGambar.ForeColor = Color.FromArgb(231, 76, 60);
+            btnHapusGambar.Location = new Point(300, 592);
+            btnHapusGambar.Name = "btnHapusGambar";
+            btnHapusGambar.ShadowDecoration.CustomizableEdges = customizableEdges7;
+            btnHapusGambar.Size = new Size(140, 48);
+            btnHapusGambar.TabIndex = 24;
+            btnHapusGambar.Text = "Hapus Gambar";
+            btnHapusGambar.Click += btnHapusGambar_Click;
+            // 
             // btnSimpan
             // 
             btnSimpan.BackColor = Color.Transparent;
@@ -403,7 +469,7 @@ namespace App_Rental_Proyek.UserControls.Admin.AlatProyek
             btnSimpan.Font = new Font("Segoe UI Semibold", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnSimpan.ForeColor = Color.White;
             btnSimpan.ImageSize = new Size(22, 22);
-            btnSimpan.Location = new Point(18, 568);
+            btnSimpan.Location = new Point(18, 712);
             btnSimpan.Name = "btnSimpan";
             btnSimpan.ShadowDecoration.CustomizableEdges = customizableEdges6;
             btnSimpan.Size = new Size(160, 40);
@@ -426,7 +492,7 @@ namespace App_Rental_Proyek.UserControls.Admin.AlatProyek
             btnKembali.Font = new Font("Segoe UI Semibold", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnKembali.ForeColor = Color.FromArgb(23, 59, 99);
             btnKembali.ImageSize = new Size(22, 22);
-            btnKembali.Location = new Point(196, 568);
+            btnKembali.Location = new Point(196, 712);
             btnKembali.Name = "btnKembali";
             btnKembali.ShadowDecoration.CustomizableEdges = customizableEdges7;
             btnKembali.Size = new Size(160, 40);
@@ -438,7 +504,7 @@ namespace App_Rental_Proyek.UserControls.Admin.AlatProyek
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(764, 634);
+            ClientSize = new Size(764, 780);
             Controls.Add(guna2Panel2);
             Controls.Add(lblKode);
             Controls.Add(txtKode);
@@ -458,6 +524,10 @@ namespace App_Rental_Proyek.UserControls.Admin.AlatProyek
             Controls.Add(cbStatus);
             Controls.Add(lblDeskripsi);
             Controls.Add(txtDeskripsi);
+            Controls.Add(lblGambar);
+            Controls.Add(picGambar);
+            Controls.Add(btnPilihGambar);
+            Controls.Add(btnHapusGambar);
             Controls.Add(btnSimpan);
             Controls.Add(btnKembali);
             FormBorderStyle = FormBorderStyle.FixedDialog;
@@ -469,6 +539,7 @@ namespace App_Rental_Proyek.UserControls.Admin.AlatProyek
             Load += CreateAlatProyek_Load;
             guna2Panel2.ResumeLayout(false);
             guna2Panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)picGambar).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -497,5 +568,9 @@ namespace App_Rental_Proyek.UserControls.Admin.AlatProyek
         private Guna.UI2.WinForms.Guna2TextBox txtDeskripsi;
         private Guna.UI2.WinForms.Guna2Button btnSimpan;
         private Guna.UI2.WinForms.Guna2Button btnKembali;
+        private Guna.UI2.WinForms.Guna2HtmlLabel lblGambar;
+        private System.Windows.Forms.PictureBox picGambar;
+        private Guna.UI2.WinForms.Guna2Button btnPilihGambar;
+        private Guna.UI2.WinForms.Guna2Button btnHapusGambar;
     }
 }

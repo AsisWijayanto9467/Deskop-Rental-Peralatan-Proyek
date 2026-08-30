@@ -1,5 +1,6 @@
 using App_Rental_Proyek.Config;
 using App_Rental_Proyek.Model;
+using App_Rental_Proyek.Helper;
 using MySql.Data.MySqlClient;
 using System;
 using System.Data;
@@ -14,6 +15,9 @@ namespace App_Rental_Proyek.UserControls.Admin.AlatProyek
 
         private ulong _alatId;
         private AlatProyekModel _alatData;
+        private string _gambarSourcePath;
+        private bool _gambarChanged;
+        private bool _gambarRemoved;
 
         public EditAlatProyek(ulong alatId)
         {
@@ -165,6 +169,19 @@ namespace App_Rental_Proyek.UserControls.Admin.AlatProyek
 
             SelectComboByValue(cbKondisi, _alatData.Kondisi);
             SelectComboByValue(cbStatus, _alatData.Status);
+
+            LoadGambarPreview();
+        }
+
+        private void LoadGambarPreview()
+        {
+            picGambar.Image?.Dispose();
+            picGambar.Image = null;
+
+            if (_alatData != null && !string.IsNullOrWhiteSpace(_alatData.Gambar))
+            {
+                picGambar.Image = AlatProyekGambarHelper.LoadImage(_alatData.Gambar);
+            }
         }
 
         private void SelectComboById(Guna.UI2.WinForms.Guna2ComboBox combo, ulong id)
@@ -241,9 +258,17 @@ namespace App_Rental_Proyek.UserControls.Admin.AlatProyek
 
         private bool UpdateAlatInDatabase(AlatProyekModel alat)
         {
+            MySqlConnection connection = null;
+            MySqlTransaction transaction = null;
+
             try
             {
-                string query = @"
+                connection = DatabaseConnection.GetConnection();
+                connection.Open();
+                transaction = connection.BeginTransaction();
+
+                // 1. Update alat proyek di tabel alat_proyeks
+                string updateQuery = @"
                     UPDATE alat_proyeks
                     SET kategori_id = @kategori_id,
                         lokasi_id = @lokasi_id,
@@ -254,30 +279,114 @@ namespace App_Rental_Proyek.UserControls.Admin.AlatProyek
                         stok_tersedia = @stok_tersedia,
                         kondisi = @kondisi,
                         status = @status,
+                        gambar = @gambar,
                         updated_at = NOW()
                     WHERE id = @id";
 
-                MySqlParameter[] parameters = new MySqlParameter[]
-                {
-                    new MySqlParameter("@id", alat.Id),
-                    new MySqlParameter("@kategori_id", alat.KategoriId),
-                    new MySqlParameter("@lokasi_id", alat.LokasiId),
-                    new MySqlParameter("@nama_alat", alat.NamaAlat),
-                    new MySqlParameter("@deskripsi", (object)alat.Deskripsi ?? DBNull.Value),
-                    new MySqlParameter("@harga", alat.HargaSewaHarian),
-                    new MySqlParameter("@stok", alat.Stok),
-                    new MySqlParameter("@stok_tersedia", alat.StokTersedia),
-                    new MySqlParameter("@kondisi", alat.Kondisi),
-                    new MySqlParameter("@status", alat.Status)
-                };
+                int affected;
 
-                return DatabaseConnection.ExecuteQuery(query, parameters) > 0;
+                using (MySqlCommand updateCmd = new MySqlCommand(updateQuery, connection, transaction))
+                {
+                    updateCmd.Parameters.AddWithValue("@id", alat.Id);
+                    updateCmd.Parameters.AddWithValue("@kategori_id", alat.KategoriId);
+                    updateCmd.Parameters.AddWithValue("@lokasi_id", alat.LokasiId);
+                    updateCmd.Parameters.AddWithValue("@nama_alat", alat.NamaAlat);
+                    updateCmd.Parameters.AddWithValue("@deskripsi", (object)alat.Deskripsi ?? DBNull.Value);
+                    updateCmd.Parameters.AddWithValue("@harga", alat.HargaSewaHarian);
+                    updateCmd.Parameters.AddWithValue("@stok", alat.Stok);
+                    updateCmd.Parameters.AddWithValue("@stok_tersedia", alat.StokTersedia);
+                    updateCmd.Parameters.AddWithValue("@kondisi", alat.Kondisi);
+                    updateCmd.Parameters.AddWithValue("@status", alat.Status);
+                    updateCmd.Parameters.AddWithValue("@gambar", (object)alat.Gambar ?? DBNull.Value);
+
+                    affected = updateCmd.ExecuteNonQuery();
+
+                    if (affected <= 0)
+                    {
+                        transaction.Rollback();
+                        return false;
+                    }
+                }
+
+                // 2. Catat aktivitas update alat proyek ke activity_logs
+                ulong currentUserId = SessionManager.GetCurrentUserId();
+
+                if (currentUserId > 0)
+                {
+                    string logQuery = @"
+                        INSERT INTO activity_logs
+                        (user_id, aktivitas, modul, referensi_id, ip_address, created_at)
+                        VALUES
+                        (@userId, @aktivitas, @modul, @referensiId, @ipAddress, NOW())";
+
+                    using (MySqlCommand logCmd = new MySqlCommand(logQuery, connection, transaction))
+                    {
+                        string activityDescription = $"Memperbarui alat proyek '{alat.NamaAlat}' (kode {alat.KodeAlat}) dengan status {alat.Status}";
+
+                        logCmd.Parameters.AddWithValue("@userId", currentUserId);
+                        logCmd.Parameters.AddWithValue("@aktivitas", activityDescription);
+                        logCmd.Parameters.AddWithValue("@modul", "Alat Proyek");
+                        logCmd.Parameters.AddWithValue("@referensiId", alat.Id);
+                        logCmd.Parameters.AddWithValue("@ipAddress", GetClientIpAddress());
+
+                        int logResult = logCmd.ExecuteNonQuery();
+
+                        if (logResult <= 0)
+                        {
+                            transaction.Rollback();
+                            return false;
+                        }
+                    }
+                }
+
+                transaction.Commit();
+                return true;
             }
             catch (Exception ex)
             {
+                if (transaction != null)
+                {
+                    try { transaction.Rollback(); }
+                    catch { }
+                }
+
                 MessageBox.Show($"Error mengupdate alat: {ex.Message}", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
+            }
+            finally
+            {
+                if (connection != null)
+                {
+                    if (connection.State == ConnectionState.Open)
+                    {
+                        connection.Close();
+                    }
+                    connection.Dispose();
+                }
+            }
+        }
+
+        private string GetClientIpAddress()
+        {
+            try
+            {
+                string hostName = System.Net.Dns.GetHostName();
+                var addresses = System.Net.Dns.GetHostAddresses(hostName);
+
+                foreach (var address in addresses)
+                {
+                    if (address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                    {
+                        return address.ToString();
+                    }
+                }
+
+                return "127.0.0.1";
+            }
+            catch
+            {
+                return "127.0.0.1";
             }
         }
 
@@ -373,8 +482,36 @@ namespace App_Rental_Proyek.UserControls.Admin.AlatProyek
                 _alatData.Kondisi = kondisi;
                 _alatData.Status = status;
 
+                string oldGambar = _alatData.Gambar;
+                string newlySavedGambar = null;
+
+                if (_gambarChanged && !string.IsNullOrWhiteSpace(_gambarSourcePath))
+                {
+                    newlySavedGambar = AlatProyekGambarHelper.SaveImageFile(_gambarSourcePath, kode);
+                    if (string.IsNullOrEmpty(newlySavedGambar))
+                    {
+                        MessageBox.Show("Gagal menyimpan file gambar!", "Error",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    _alatData.Gambar = newlySavedGambar;
+                }
+                else if (_gambarRemoved)
+                {
+                    _alatData.Gambar = null;
+                }
+
                 if (UpdateAlatInDatabase(_alatData))
                 {
+                    if (_gambarChanged && !string.IsNullOrWhiteSpace(oldGambar) && oldGambar != newlySavedGambar)
+                    {
+                        AlatProyekGambarHelper.DeleteImageFile(oldGambar);
+                    }
+                    else if (_gambarRemoved && !string.IsNullOrWhiteSpace(oldGambar))
+                    {
+                        AlatProyekGambarHelper.DeleteImageFile(oldGambar);
+                    }
+
                     MessageBox.Show("Alat berhasil diupdate!", "Sukses",
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
                     this.DialogResult = DialogResult.OK;
@@ -382,6 +519,10 @@ namespace App_Rental_Proyek.UserControls.Admin.AlatProyek
                 }
                 else
                 {
+                    if (!string.IsNullOrEmpty(newlySavedGambar))
+                    {
+                        AlatProyekGambarHelper.DeleteImageFile(newlySavedGambar);
+                    }
                     MessageBox.Show("Gagal mengupdate alat. Silakan coba lagi.",
                         "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
@@ -391,6 +532,50 @@ namespace App_Rental_Proyek.UserControls.Admin.AlatProyek
                 MessageBox.Show($"Terjadi kesalahan: {ex.Message}",
                     "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void btnPilihGambar_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog ofd = new OpenFileDialog())
+            {
+                ofd.Title = "Pilih Gambar Alat";
+                ofd.Filter = "File Gambar|*.jpg;*.jpeg;*.png;*.bmp;*.gif;*.webp|Semua File|*.*";
+                ofd.CheckFileExists = true;
+
+                if (ofd.ShowDialog() == DialogResult.OK)
+                {
+                    if (!AlatProyekGambarHelper.IsImage(ofd.FileName))
+                    {
+                        MessageBox.Show("File yang dipilih bukan gambar yang valid!",
+                            "Validasi Gagal", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+
+                    _gambarSourcePath = ofd.FileName;
+                    _gambarChanged = true;
+                    _gambarRemoved = false;
+
+                    picGambar.Image?.Dispose();
+                    try
+                    {
+                        picGambar.Image = System.Drawing.Image.FromFile(ofd.FileName);
+                    }
+                    catch
+                    {
+                        picGambar.Image = null;
+                    }
+                }
+            }
+        }
+
+        private void btnHapusGambar_Click(object sender, EventArgs e)
+        {
+            _gambarSourcePath = null;
+            _gambarChanged = false;
+            _gambarRemoved = true;
+
+            picGambar.Image?.Dispose();
+            picGambar.Image = null;
         }
 
         private void btnKembali_Click(object sender, EventArgs e)

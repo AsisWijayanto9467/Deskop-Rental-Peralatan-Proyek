@@ -135,30 +135,120 @@ namespace App_Rental_Proyek.UserControls.Admin.Lokasi
 
         private bool UpdateLokasiInDatabase(LokasiModel lokasi)
         {
+            MySqlConnection connection = null;
+            MySqlTransaction transaction = null;
+
             try
             {
-                string query = @"
+                connection = DatabaseConnection.GetConnection();
+                connection.Open();
+                transaction = connection.BeginTransaction();
+
+                // 1. Update lokasi di tabel lokasis
+                string updateQuery = @"
                     UPDATE lokasis
                     SET nama_lokasi = @nama, alamat = @alamat, keterangan = @keterangan,
                         status = @status, updated_at = NOW()
                     WHERE id = @id";
 
-                MySqlParameter[] parameters = new MySqlParameter[]
-                {
-                    new MySqlParameter("@id", lokasi.Id),
-                    new MySqlParameter("@nama", lokasi.NamaLokasi),
-                    new MySqlParameter("@alamat", lokasi.Alamat),
-                    new MySqlParameter("@keterangan", (object)lokasi.Keterangan ?? DBNull.Value),
-                    new MySqlParameter("@status", lokasi.Status)
-                };
+                int affected;
 
-                return DatabaseConnection.ExecuteQuery(query, parameters) > 0;
+                using (MySqlCommand updateCmd = new MySqlCommand(updateQuery, connection, transaction))
+                {
+                    updateCmd.Parameters.AddWithValue("@id", lokasi.Id);
+                    updateCmd.Parameters.AddWithValue("@nama", lokasi.NamaLokasi);
+                    updateCmd.Parameters.AddWithValue("@alamat", lokasi.Alamat);
+                    updateCmd.Parameters.AddWithValue("@keterangan", (object)lokasi.Keterangan ?? DBNull.Value);
+                    updateCmd.Parameters.AddWithValue("@status", lokasi.Status);
+
+                    affected = updateCmd.ExecuteNonQuery();
+
+                    if (affected <= 0)
+                    {
+                        transaction.Rollback();
+                        return false;
+                    }
+                }
+
+                // 2. Catat aktivitas update lokasi ke activity_logs
+                ulong currentUserId = SessionManager.GetCurrentUserId();
+
+                if (currentUserId > 0)
+                {
+                    string logQuery = @"
+                        INSERT INTO activity_logs
+                        (user_id, aktivitas, modul, referensi_id, ip_address, created_at)
+                        VALUES
+                        (@userId, @aktivitas, @modul, @referensiId, @ipAddress, NOW())";
+
+                    using (MySqlCommand logCmd = new MySqlCommand(logQuery, connection, transaction))
+                    {
+                        string activityDescription = $"Memperbarui lokasi '{lokasi.NamaLokasi}' dengan status {lokasi.Status}";
+
+                        logCmd.Parameters.AddWithValue("@userId", currentUserId);
+                        logCmd.Parameters.AddWithValue("@aktivitas", activityDescription);
+                        logCmd.Parameters.AddWithValue("@modul", "Lokasi");
+                        logCmd.Parameters.AddWithValue("@referensiId", lokasi.Id);
+                        logCmd.Parameters.AddWithValue("@ipAddress", GetClientIpAddress());
+
+                        int logResult = logCmd.ExecuteNonQuery();
+
+                        if (logResult <= 0)
+                        {
+                            transaction.Rollback();
+                            return false;
+                        }
+                    }
+                }
+
+                transaction.Commit();
+                return true;
             }
             catch (Exception ex)
             {
+                if (transaction != null)
+                {
+                    try { transaction.Rollback(); }
+                    catch { }
+                }
+
                 MessageBox.Show($"Error mengupdate lokasi: {ex.Message}", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
+            }
+            finally
+            {
+                if (connection != null)
+                {
+                    if (connection.State == ConnectionState.Open)
+                    {
+                        connection.Close();
+                    }
+                    connection.Dispose();
+                }
+            }
+        }
+
+        private string GetClientIpAddress()
+        {
+            try
+            {
+                string hostName = System.Net.Dns.GetHostName();
+                var addresses = System.Net.Dns.GetHostAddresses(hostName);
+
+                foreach (var address in addresses)
+                {
+                    if (address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                    {
+                        return address.ToString();
+                    }
+                }
+
+                return "127.0.0.1";
+            }
+            catch
+            {
+                return "127.0.0.1";
             }
         }
 
