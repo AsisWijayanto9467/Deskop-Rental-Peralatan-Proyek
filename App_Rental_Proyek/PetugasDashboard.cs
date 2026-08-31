@@ -6,6 +6,8 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
+using App_Rental_Proyek.UserControls.Petugas.Dashboard;
+
 namespace App_Rental_Proyek
 {
     public partial class PetugasDashboard : Form
@@ -96,8 +98,7 @@ namespace App_Rental_Proyek
         // ============================================
         private void ShowDashboard()
         {
-            // Ganti dengan UserControl Dashboard yang sesuai
-            // ShowControl(new UserControls.Petugas.DashboardPetugas());
+            ShowControl(new DashboardPetugas());
             SetActiveButton(btnDashboard);
         }
 

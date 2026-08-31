@@ -17,6 +17,7 @@ namespace App_Rental_Proyek.Model
         public string Status { get; set; } = "pending";
         // pending, disetujui, ditolak, menunggu_pembayaran, dibayar, sedang_disewa, selesai, dibatalkan
         public string? Catatan { get; set; }
+        public string? AlasanPenolakan { get; set; }  // Tambahan: alasan penolakan (nullable)
         public ulong? ProcessedBy { get; set; }
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }

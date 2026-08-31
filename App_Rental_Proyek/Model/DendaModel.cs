@@ -6,6 +6,7 @@ namespace App_Rental_Proyek.Model
     {
         public ulong Id { get; set; }
         public ulong PenyewaanId { get; set; }
+        public ulong DendaId { get; set; }
         public ulong? PengembalianId { get; set; }
         public string JenisDenda { get; set; } = string.Empty; // terlambat, kerusakan, kehilangan
         public decimal Jumlah { get; set; }
