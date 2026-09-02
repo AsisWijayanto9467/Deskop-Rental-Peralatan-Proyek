@@ -8,6 +8,8 @@ using System.Windows.Forms;
 
 using App_Rental_Proyek.UserControls.Petugas.Dashboard;
 using App_Rental_Proyek.UserControls.Petugas.Penyewaan;
+using App_Rental_Proyek.UserControls.Petugas.Pembayaran;
+using App_Rental_Proyek.UserControls.Petugas.PersiapanAlat;
 
 namespace App_Rental_Proyek
 {
@@ -111,15 +113,13 @@ namespace App_Rental_Proyek
 
         private void ShowPembayaran()
         {
-            // Ganti dengan UserControl Pembayaran yang sesuai
-            // ShowControl(new UserControls.Petugas.Pembayaran());
+            ShowControl(new PembayaranPage());
             SetActiveButton(btnPembayaran);
         }
 
         private void ShowPersiapanAlat()
         {
-            // Ganti dengan UserControl PersiapanAlat yang sesuai
-            // ShowControl(new UserControls.Petugas.PersiapanAlat());
+            ShowControl(new PersiapanAlatPage());
             SetActiveButton(btnPersiapanAlat);
         }
 
