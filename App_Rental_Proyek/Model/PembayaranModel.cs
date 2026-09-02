@@ -6,6 +6,7 @@ namespace App_Rental_Proyek.Model
     {
         public ulong Id { get; set; }
         public ulong PenyewaanId { get; set; }
+        public ulong? DendaId { get; set; }  // Tambahan: foreign key ke tabel dendas (nullable)
         public string KodePembayaran { get; set; } = string.Empty;
         public DateTime TanggalPembayaran { get; set; }
         public decimal Jumlah { get; set; } = 0;
@@ -31,5 +32,12 @@ namespace App_Rental_Proyek.Model
         public string NoTeleponCustomer { get; set; } = string.Empty;
         public string AlamatCustomer { get; set; } = string.Empty;
         public string NamaVerifikator { get; set; } = string.Empty;
+
+        // =====================
+        // Properti tambahan untuk info denda (hasil JOIN)
+        // =====================
+        public string? JenisDenda { get; set; }        // terlambat, kerusakan, kehilangan
+        public decimal JumlahDenda { get; set; } = 0;
+        public string? StatusDenda { get; set; }       // pending, dibayar, ditangguhkan
     }
 }

@@ -59,7 +59,7 @@ namespace App_Rental_Proyek
             // MODE 2: AUTO LOGIN / DASHBOARD
 
             
-            string usernameLogin = "admin";
+            string usernameLogin = "petugas";
 
             UserModel user = AutoLogin(usernameLogin);
 

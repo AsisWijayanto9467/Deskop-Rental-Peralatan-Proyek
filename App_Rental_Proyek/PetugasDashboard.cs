@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 
 using App_Rental_Proyek.UserControls.Petugas.Dashboard;
+using App_Rental_Proyek.UserControls.Petugas.Penyewaan;
 
 namespace App_Rental_Proyek
 {
@@ -104,8 +105,7 @@ namespace App_Rental_Proyek
 
         private void ShowPenyewaan()
         {
-            // Ganti dengan UserControl Penyewaan yang sesuai
-            // ShowControl(new UserControls.Petugas.Penyewaan());
+            ShowControl(new PenyewaanPage());
             SetActiveButton(btnPenyewaan);
         }
 
