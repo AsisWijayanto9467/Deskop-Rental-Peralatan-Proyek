@@ -108,7 +108,7 @@ namespace App_Rental_Proyek
                     DatabaseConnection.GetData(
                         query,
                         parameters);
-
+                
                 if (dt.Rows.Count == 0)
                 {
                     Console.WriteLine(

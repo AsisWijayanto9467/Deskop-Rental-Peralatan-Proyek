@@ -10,6 +10,7 @@ using App_Rental_Proyek.UserControls.Petugas.Dashboard;
 using App_Rental_Proyek.UserControls.Petugas.Penyewaan;
 using App_Rental_Proyek.UserControls.Petugas.Pembayaran;
 using App_Rental_Proyek.UserControls.Petugas.PersiapanAlat;
+using App_Rental_Proyek.UserControls.Petugas.Pengembalian;
 
 namespace App_Rental_Proyek
 {
@@ -125,8 +126,7 @@ namespace App_Rental_Proyek
 
         private void ShowPengembalian()
         {
-            // Ganti dengan UserControl Pengembalian yang sesuai
-            // ShowControl(new UserControls.Petugas.Pengembalian());
+            ShowControl(new PengembalianPage());
             SetActiveButton(btnPengembalian);
         }
 

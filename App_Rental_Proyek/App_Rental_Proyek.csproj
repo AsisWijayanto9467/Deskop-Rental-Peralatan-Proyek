@@ -40,4 +40,26 @@
     </EmbeddedResource>
   </ItemGroup>
 
+  <!-- Petugas Pengembalian -->
+  <ItemGroup>
+    <Compile Update="UserControls\Petugas\Pengembalian\PengembalianPage.Designer.cs">
+      <DependentUpon>PengembalianPage.cs</DependentUpon>
+    </Compile>
+    <Compile Update="UserControls\Petugas\Pengembalian\InspeksiPengembalian.Designer.cs">
+      <DependentUpon>InspeksiPengembalian.cs</DependentUpon>
+    </Compile>
+    <Compile Update="UserControls\Petugas\Pengembalian\DetailPengembalian.Designer.cs">
+      <DependentUpon>DetailPengembalian.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="UserControls\Petugas\Pengembalian\PengembalianPage.resx">
+      <DependentUpon>PengembalianPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="UserControls\Petugas\Pengembalian\InspeksiPengembalian.resx">
+      <DependentUpon>InspeksiPengembalian.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="UserControls\Petugas\Pengembalian\DetailPengembalian.resx">
+      <DependentUpon>DetailPengembalian.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+
 </Project>
