@@ -11,6 +11,7 @@ using App_Rental_Proyek.UserControls.Petugas.Penyewaan;
 using App_Rental_Proyek.UserControls.Petugas.Pembayaran;
 using App_Rental_Proyek.UserControls.Petugas.PersiapanAlat;
 using App_Rental_Proyek.UserControls.Petugas.Pengembalian;
+using App_Rental_Proyek.UserControls.Petugas.Denda;
 
 namespace App_Rental_Proyek
 {
@@ -132,8 +133,7 @@ namespace App_Rental_Proyek
 
         private void ShowDenda()
         {
-            // Ganti dengan UserControl Denda yang sesuai
-            // ShowControl(new UserControls.Petugas.Denda());
+            ShowControl(new DendaPage());
             SetActiveButton(btnDenda);
         }
 
