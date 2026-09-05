@@ -12,6 +12,7 @@ using App_Rental_Proyek.UserControls.Petugas.Pembayaran;
 using App_Rental_Proyek.UserControls.Petugas.PersiapanAlat;
 using App_Rental_Proyek.UserControls.Petugas.Pengembalian;
 using App_Rental_Proyek.UserControls.Petugas.Denda;
+using App_Rental_Proyek.UserControls.Petugas.Laporan;
 
 namespace App_Rental_Proyek
 {
@@ -139,8 +140,7 @@ namespace App_Rental_Proyek
 
         private void ShowLaporan()
         {
-            // Ganti dengan UserControl Laporan yang sesuai
-            // ShowControl(new UserControls.Petugas.Laporan());
+            ShowControl(new LaporanPage());
             SetActiveButton(btnLaporan);
         }
 

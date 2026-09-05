@@ -10,9 +10,11 @@
 
   <ItemGroup>
     <PackageReference Include="BCrypt.Net-Next" Version="4.2.0" />
+    <PackageReference Include="ClosedXML" Version="0.102.3" />
     <PackageReference Include="Guna.UI2.WinForms" Version="2.0.4.8" />
     <PackageReference Include="MySql.Data" Version="26.7.0" />
     <PackageReference Include="MySqlConnector" Version="2.6.2" />
+    <PackageReference Include="QuestPDF" Version="2024.10.0" />
   </ItemGroup>
 
   <!-- Activity Log admin page -->
@@ -59,6 +61,22 @@
     </EmbeddedResource>
     <EmbeddedResource Update="UserControls\Petugas\Pengembalian\DetailPengembalian.resx">
       <DependentUpon>DetailPengembalian.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <!-- Petugas Laporan -->
+  <ItemGroup>
+    <Compile Update="UserControls\Petugas\Laporan\LaporanPage.Designer.cs">
+      <DependentUpon>LaporanPage.cs</DependentUpon>
+    </Compile>
+    <Compile Update="UserControls\Petugas\Laporan\DownloadLaporanForm.Designer.cs">
+      <DependentUpon>DownloadLaporanForm.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="UserControls\Petugas\Laporan\LaporanPage.resx">
+      <DependentUpon>LaporanPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="UserControls\Petugas\Laporan\DownloadLaporanForm.resx">
+      <DependentUpon>DownloadLaporanForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
 
