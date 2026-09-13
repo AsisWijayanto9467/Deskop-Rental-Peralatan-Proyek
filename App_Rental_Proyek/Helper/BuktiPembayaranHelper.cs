@@ -20,6 +20,9 @@ namespace App_Rental_Proyek.Helper
             candidate = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path);
             if (File.Exists(candidate)) return candidate;
 
+            string dokumenPath = DokumenHelper.GetFullPath(path);
+            if (File.Exists(dokumenPath)) return dokumenPath;
+
             return path;
         }
 

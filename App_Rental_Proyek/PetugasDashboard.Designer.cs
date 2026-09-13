@@ -66,10 +66,6 @@
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges36 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges37 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges38 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges41 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges42 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges39 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges40 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             guna2HtmlLabel2 = new Guna.UI2.WinForms.Guna2HtmlLabel();
             guna2Button9 = new Guna.UI2.WinForms.Guna2Button();
             guna2HtmlLabel7 = new Guna.UI2.WinForms.Guna2HtmlLabel();
@@ -94,7 +90,6 @@
             PanelKonten = new Guna.UI2.WinForms.Guna2Panel();
             btnDashboard = new Guna.UI2.WinForms.Guna2Button();
             btnLaporan = new Guna.UI2.WinForms.Guna2Button();
-            btnLokasi = new Guna.UI2.WinForms.Guna2Button();
             btnPenyewaan = new Guna.UI2.WinForms.Guna2Button();
             guna2HtmlLabel3 = new Guna.UI2.WinForms.Guna2HtmlLabel();
             label4 = new Label();
@@ -102,7 +97,6 @@
             guna2Panel2 = new Guna.UI2.WinForms.Guna2Panel();
             guna2Panel1 = new Guna.UI2.WinForms.Guna2Panel();
             guna2HtmlLabel5 = new Guna.UI2.WinForms.Guna2HtmlLabel();
-            btnAlatProyek = new Guna.UI2.WinForms.Guna2Button();
             guna2Panel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox4).BeginInit();
@@ -211,6 +205,7 @@
             btnPengembalian.FillColor = Color.FromArgb(23, 59, 99);
             btnPengembalian.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnPengembalian.ForeColor = Color.White;
+            btnPengembalian.Image = Properties.Resources.left_right_solid;
             btnPengembalian.ImageAlign = HorizontalAlignment.Left;
             btnPengembalian.ImageSize = new Size(30, 30);
             btnPengembalian.Location = new Point(15, 471);
@@ -245,6 +240,7 @@
             btnDenda.FillColor = Color.FromArgb(23, 59, 99);
             btnDenda.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnDenda.ForeColor = Color.White;
+            btnDenda.Image = Properties.Resources.money_bills_solid;
             btnDenda.ImageAlign = HorizontalAlignment.Left;
             btnDenda.ImageSize = new Size(30, 30);
             btnDenda.Location = new Point(15, 539);
@@ -314,6 +310,7 @@
             btnPersiapanAlat.FillColor = Color.FromArgb(23, 59, 99);
             btnPersiapanAlat.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnPersiapanAlat.ForeColor = Color.White;
+            btnPersiapanAlat.Image = Properties.Resources.screwdriver_wrench_solid__1_;
             btnPersiapanAlat.ImageAlign = HorizontalAlignment.Left;
             btnPersiapanAlat.ImageSize = new Size(30, 30);
             btnPersiapanAlat.Location = new Point(15, 403);
@@ -338,6 +335,7 @@
             btnPembayaran.FillColor = Color.FromArgb(23, 59, 99);
             btnPembayaran.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnPembayaran.ForeColor = Color.White;
+            btnPembayaran.Image = Properties.Resources.credit_card_solid;
             btnPembayaran.ImageAlign = HorizontalAlignment.Left;
             btnPembayaran.ImageSize = new Size(30, 30);
             btnPembayaran.Location = new Point(15, 335);
@@ -495,6 +493,7 @@
             PanelKonten.ShadowDecoration.CustomizableEdges = customizableEdges26;
             PanelKonten.Size = new Size(1556, 899);
             PanelKonten.TabIndex = 8;
+            PanelKonten.Paint += PanelKonten_Paint;
             // 
             // btnDashboard
             // 
@@ -546,35 +545,11 @@
             btnLaporan.TextAlign = HorizontalAlignment.Left;
             btnLaporan.Click += btnLaporan_Click;
             // 
-            // btnLokasi
-            // 
-            btnLokasi.BackColor = Color.Transparent;
-            btnLokasi.BorderRadius = 20;
-            btnLokasi.CustomizableEdges = customizableEdges31;
-            btnLokasi.DisabledState.BorderColor = Color.DarkGray;
-            btnLokasi.DisabledState.CustomBorderColor = Color.DarkGray;
-            btnLokasi.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
-            btnLokasi.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
-            btnLokasi.FillColor = Color.FromArgb(23, 59, 99);
-            btnLokasi.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnLokasi.ForeColor = Color.White;
-            btnLokasi.ImageAlign = HorizontalAlignment.Left;
-            btnLokasi.ImageSize = new Size(30, 30);
-            btnLokasi.Location = new Point(15, 715);
-            btnLokasi.Name = "btnLokasi";
-            btnLokasi.PressedColor = Color.Aquamarine;
-            btnLokasi.ShadowDecoration.CustomizableEdges = customizableEdges32;
-            btnLokasi.Size = new Size(302, 62);
-            btnLokasi.TabIndex = 27;
-            btnLokasi.Text = "Lokasi";
-            btnLokasi.TextAlign = HorizontalAlignment.Left;
-            btnLokasi.Click += btnLokasi_Click;
-            // 
             // btnPenyewaan
             // 
             btnPenyewaan.BackColor = Color.Transparent;
             btnPenyewaan.BorderRadius = 20;
-            btnPenyewaan.CustomizableEdges = customizableEdges33;
+            btnPenyewaan.CustomizableEdges = customizableEdges31;
             btnPenyewaan.DisabledState.BorderColor = Color.DarkGray;
             btnPenyewaan.DisabledState.CustomBorderColor = Color.DarkGray;
             btnPenyewaan.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
@@ -582,12 +557,13 @@
             btnPenyewaan.FillColor = Color.FromArgb(23, 59, 99);
             btnPenyewaan.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnPenyewaan.ForeColor = Color.White;
+            btnPenyewaan.Image = Properties.Resources.clipboard_list_solid__1_;
             btnPenyewaan.ImageAlign = HorizontalAlignment.Left;
             btnPenyewaan.ImageSize = new Size(30, 30);
-            btnPenyewaan.Location = new Point(18, 267);
+            btnPenyewaan.Location = new Point(14, 267);
             btnPenyewaan.Name = "btnPenyewaan";
             btnPenyewaan.PressedColor = Color.Aquamarine;
-            btnPenyewaan.ShadowDecoration.CustomizableEdges = customizableEdges34;
+            btnPenyewaan.ShadowDecoration.CustomizableEdges = customizableEdges32;
             btnPenyewaan.Size = new Size(302, 62);
             btnPenyewaan.TabIndex = 23;
             btnPenyewaan.Text = "Penyewaan";
@@ -621,7 +597,7 @@
             // 
             btnLogout.BackColor = Color.Transparent;
             btnLogout.BorderRadius = 20;
-            btnLogout.CustomizableEdges = customizableEdges35;
+            btnLogout.CustomizableEdges = customizableEdges33;
             btnLogout.DisabledState.BorderColor = Color.DarkGray;
             btnLogout.DisabledState.CustomBorderColor = Color.DarkGray;
             btnLogout.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
@@ -632,7 +608,7 @@
             btnLogout.Location = new Point(18, 925);
             btnLogout.Name = "btnLogout";
             btnLogout.PressedColor = Color.Aquamarine;
-            btnLogout.ShadowDecoration.CustomizableEdges = customizableEdges36;
+            btnLogout.ShadowDecoration.CustomizableEdges = customizableEdges34;
             btnLogout.Size = new Size(302, 62);
             btnLogout.TabIndex = 5;
             btnLogout.Text = "logout";
@@ -643,17 +619,16 @@
             guna2Panel2.BackColor = Color.White;
             guna2Panel2.Controls.Add(guna2HtmlLabel2);
             guna2Panel2.Controls.Add(guna2HtmlLabel1);
-            guna2Panel2.CustomizableEdges = customizableEdges37;
+            guna2Panel2.CustomizableEdges = customizableEdges35;
             guna2Panel2.Location = new Point(330, 2);
             guna2Panel2.Name = "guna2Panel2";
-            guna2Panel2.ShadowDecoration.CustomizableEdges = customizableEdges38;
+            guna2Panel2.ShadowDecoration.CustomizableEdges = customizableEdges36;
             guna2Panel2.Size = new Size(1585, 77);
             guna2Panel2.TabIndex = 7;
             // 
             // guna2Panel1
             // 
             guna2Panel1.Controls.Add(guna2HtmlLabel5);
-            guna2Panel1.Controls.Add(btnAlatProyek);
             guna2Panel1.Controls.Add(btnPengembalian);
             guna2Panel1.Controls.Add(btnDenda);
             guna2Panel1.Controls.Add(guna2HtmlLabel4);
@@ -661,18 +636,17 @@
             guna2Panel1.Controls.Add(btnPembayaran);
             guna2Panel1.Controls.Add(guna2Panel4);
             guna2Panel1.Controls.Add(btnLaporan);
-            guna2Panel1.Controls.Add(btnLokasi);
             guna2Panel1.Controls.Add(btnPenyewaan);
             guna2Panel1.Controls.Add(guna2HtmlLabel3);
             guna2Panel1.Controls.Add(pictureBox4);
             guna2Panel1.Controls.Add(label4);
             guna2Panel1.Controls.Add(btnLogout);
             guna2Panel1.Controls.Add(btnDashboard);
-            guna2Panel1.CustomizableEdges = customizableEdges41;
+            guna2Panel1.CustomizableEdges = customizableEdges37;
             guna2Panel1.FillColor = Color.FromArgb(23, 59, 99);
             guna2Panel1.Location = new Point(-3, -1);
             guna2Panel1.Name = "guna2Panel1";
-            guna2Panel1.ShadowDecoration.CustomizableEdges = customizableEdges42;
+            guna2Panel1.ShadowDecoration.CustomizableEdges = customizableEdges38;
             guna2Panel1.Size = new Size(333, 998);
             guna2Panel1.TabIndex = 6;
             // 
@@ -686,30 +660,6 @@
             guna2HtmlLabel5.Size = new Size(85, 22);
             guna2HtmlLabel5.TabIndex = 38;
             guna2HtmlLabel5.Text = "Operasional";
-            // 
-            // btnAlatProyek
-            // 
-            btnAlatProyek.BackColor = Color.Transparent;
-            btnAlatProyek.BorderRadius = 20;
-            btnAlatProyek.CustomizableEdges = customizableEdges39;
-            btnAlatProyek.DisabledState.BorderColor = Color.DarkGray;
-            btnAlatProyek.DisabledState.CustomBorderColor = Color.DarkGray;
-            btnAlatProyek.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
-            btnAlatProyek.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
-            btnAlatProyek.FillColor = Color.FromArgb(23, 59, 99);
-            btnAlatProyek.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnAlatProyek.ForeColor = Color.White;
-            btnAlatProyek.ImageAlign = HorizontalAlignment.Left;
-            btnAlatProyek.ImageSize = new Size(30, 30);
-            btnAlatProyek.Location = new Point(14, 782);
-            btnAlatProyek.Name = "btnAlatProyek";
-            btnAlatProyek.PressedColor = Color.Aquamarine;
-            btnAlatProyek.ShadowDecoration.CustomizableEdges = customizableEdges40;
-            btnAlatProyek.Size = new Size(302, 62);
-            btnAlatProyek.TabIndex = 37;
-            btnAlatProyek.Text = "Alat Proyek";
-            btnAlatProyek.TextAlign = HorizontalAlignment.Left;
-            btnAlatProyek.Click += btnAlatProyek_Click;
             // 
             // PetugasDashboard
             // 
@@ -759,7 +709,6 @@
         private Guna.UI2.WinForms.Guna2Panel PanelKonten;
         private Guna.UI2.WinForms.Guna2Button btnDashboard;
         private Guna.UI2.WinForms.Guna2Button btnLaporan;
-        private Guna.UI2.WinForms.Guna2Button btnLokasi;
         private Guna.UI2.WinForms.Guna2Button btnPenyewaan;
         private Guna.UI2.WinForms.Guna2HtmlLabel guna2HtmlLabel3;
         private Label label4;
@@ -767,6 +716,5 @@
         private Guna.UI2.WinForms.Guna2Panel guna2Panel2;
         private Guna.UI2.WinForms.Guna2Panel guna2Panel1;
         private Guna.UI2.WinForms.Guna2HtmlLabel guna2HtmlLabel5;
-        private Guna.UI2.WinForms.Guna2Button btnAlatProyek;
     }
 }

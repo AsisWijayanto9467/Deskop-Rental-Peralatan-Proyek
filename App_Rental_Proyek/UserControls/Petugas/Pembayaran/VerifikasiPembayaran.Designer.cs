@@ -28,20 +28,18 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
         /// </summary>
         private void InitializeComponent()
         {
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges1 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges2 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges3 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges4 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges5 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges6 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges1 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges2 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges7 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges8 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges5 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges6 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges9 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges10 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges11 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges12 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges13 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges14 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             guna2Panel1 = new Guna.UI2.WinForms.Guna2Panel();
             lblMetode = new Guna.UI2.WinForms.Guna2HtmlLabel();
             lblJumlah = new Guna.UI2.WinForms.Guna2HtmlLabel();
@@ -82,10 +80,10 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
             guna2Panel1.Controls.Add(guna2HtmlLabel3);
             guna2Panel1.Controls.Add(guna2HtmlLabel2);
             guna2Panel1.Controls.Add(guna2HtmlLabel1);
-            guna2Panel1.CustomizableEdges = customizableEdges1;
+            guna2Panel1.CustomizableEdges = customizableEdges3;
             guna2Panel1.Location = new Point(18, 18);
             guna2Panel1.Name = "guna2Panel1";
-            guna2Panel1.ShadowDecoration.CustomizableEdges = customizableEdges2;
+            guna2Panel1.ShadowDecoration.CustomizableEdges = customizableEdges4;
             guna2Panel1.Size = new Size(545, 265);
             guna2Panel1.TabIndex = 0;
             // 
@@ -96,7 +94,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
             lblMetode.ForeColor = Color.FromArgb(96, 110, 130);
             lblMetode.Location = new Point(130, 155);
             lblMetode.Name = "lblMetode";
-            lblMetode.Size = new Size(59, 25);
+            lblMetode.Size = new Size(40, 25);
             lblMetode.TabIndex = 11;
             lblMetode.Text = "Cash";
             // 
@@ -107,7 +105,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
             lblJumlah.ForeColor = Color.FromArgb(23, 59, 99);
             lblJumlah.Location = new Point(130, 125);
             lblJumlah.Name = "lblJumlah";
-            lblJumlah.Size = new Size(81, 25);
+            lblJumlah.Size = new Size(40, 25);
             lblJumlah.TabIndex = 10;
             lblJumlah.Text = "Rp 0";
             // 
@@ -118,14 +116,14 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
             lblBukti.ForeColor = Color.FromArgb(96, 110, 130);
             lblBukti.Location = new Point(130, 185);
             lblBukti.Name = "lblBukti";
-            lblBukti.Size = new Size(110, 25);
+            lblBukti.Size = new Size(119, 25);
             lblBukti.TabIndex = 9;
             lblBukti.Text = "Tidak ada bukti";
             // 
             // btnLihatBukti
             // 
             btnLihatBukti.BorderRadius = 6;
-            btnLihatBukti.CustomizableEdges = customizableEdges3;
+            btnLihatBukti.CustomizableEdges = customizableEdges1;
             btnLihatBukti.DisabledState.BorderColor = Color.DarkGray;
             btnLihatBukti.DisabledState.CustomBorderColor = Color.DarkGray;
             btnLihatBukti.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
@@ -133,9 +131,9 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
             btnLihatBukti.FillColor = Color.FromArgb(155, 89, 182);
             btnLihatBukti.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             btnLihatBukti.ForeColor = Color.White;
-            btnLihatBukti.Location = new Point(280, 180);
+            btnLihatBukti.Location = new Point(18, 216);
             btnLihatBukti.Name = "btnLihatBukti";
-            btnLihatBukti.ShadowDecoration.CustomizableEdges = customizableEdges4;
+            btnLihatBukti.ShadowDecoration.CustomizableEdges = customizableEdges2;
             btnLihatBukti.Size = new Size(100, 35);
             btnLihatBukti.TabIndex = 8;
             btnLihatBukti.Text = "Lihat";
@@ -149,7 +147,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
             lblCustomer.ForeColor = Color.FromArgb(96, 110, 130);
             lblCustomer.Location = new Point(130, 95);
             lblCustomer.Name = "lblCustomer";
-            lblCustomer.Size = new Size(22, 25);
+            lblCustomer.Size = new Size(10, 25);
             lblCustomer.TabIndex = 7;
             lblCustomer.Text = "-";
             // 
@@ -160,7 +158,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
             lblKodePenyewaan.ForeColor = Color.FromArgb(96, 110, 130);
             lblKodePenyewaan.Location = new Point(130, 65);
             lblKodePenyewaan.Name = "lblKodePenyewaan";
-            lblKodePenyewaan.Size = new Size(22, 25);
+            lblKodePenyewaan.Size = new Size(10, 25);
             lblKodePenyewaan.TabIndex = 6;
             lblKodePenyewaan.Text = "-";
             // 
@@ -171,7 +169,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
             lblKodePembayaran.ForeColor = Color.FromArgb(23, 59, 99);
             lblKodePembayaran.Location = new Point(130, 35);
             lblKodePembayaran.Name = "lblKodePembayaran";
-            lblKodePembayaran.Size = new Size(139, 25);
+            lblKodePembayaran.Size = new Size(159, 25);
             lblKodePembayaran.TabIndex = 5;
             lblKodePembayaran.Text = "PAY-20260902-001";
             // 
@@ -182,7 +180,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
             guna2HtmlLabel5.ForeColor = Color.FromArgb(96, 110, 130);
             guna2HtmlLabel5.Location = new Point(18, 185);
             guna2HtmlLabel5.Name = "guna2HtmlLabel5";
-            guna2HtmlLabel5.Size = new Size(106, 25);
+            guna2HtmlLabel5.Size = new Size(92, 25);
             guna2HtmlLabel5.TabIndex = 4;
             guna2HtmlLabel5.Text = "Bukti Bayar:";
             // 
@@ -193,7 +191,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
             guna2HtmlLabel4.ForeColor = Color.FromArgb(96, 110, 130);
             guna2HtmlLabel4.Location = new Point(18, 155);
             guna2HtmlLabel4.Name = "guna2HtmlLabel4";
-            guna2HtmlLabel4.Size = new Size(105, 25);
+            guna2HtmlLabel4.Size = new Size(66, 25);
             guna2HtmlLabel4.TabIndex = 3;
             guna2HtmlLabel4.Text = "Metode:";
             // 
@@ -204,7 +202,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
             guna2HtmlLabel3.ForeColor = Color.FromArgb(96, 110, 130);
             guna2HtmlLabel3.Location = new Point(18, 125);
             guna2HtmlLabel3.Name = "guna2HtmlLabel3";
-            guna2HtmlLabel3.Size = new Size(69, 25);
+            guna2HtmlLabel3.Size = new Size(61, 25);
             guna2HtmlLabel3.TabIndex = 2;
             guna2HtmlLabel3.Text = "Jumlah:";
             // 
@@ -215,7 +213,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
             guna2HtmlLabel2.ForeColor = Color.FromArgb(96, 110, 130);
             guna2HtmlLabel2.Location = new Point(18, 95);
             guna2HtmlLabel2.Name = "guna2HtmlLabel2";
-            guna2HtmlLabel2.Size = new Size(87, 25);
+            guna2HtmlLabel2.Size = new Size(81, 25);
             guna2HtmlLabel2.TabIndex = 1;
             guna2HtmlLabel2.Text = "Customer:";
             // 
@@ -226,7 +224,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
             guna2HtmlLabel1.ForeColor = Color.FromArgb(96, 110, 130);
             guna2HtmlLabel1.Location = new Point(18, 65);
             guna2HtmlLabel1.Name = "guna2HtmlLabel1";
-            guna2HtmlLabel1.Size = new Size(69, 25);
+            guna2HtmlLabel1.Size = new Size(78, 25);
             guna2HtmlLabel1.TabIndex = 1;
             guna2HtmlLabel1.Text = "No. Sewa:";
             // 
@@ -238,10 +236,10 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
             guna2Panel2.BorderThickness = 2;
             guna2Panel2.Controls.Add(txtCatatan);
             guna2Panel2.Controls.Add(guna2HtmlLabel6);
-            guna2Panel2.CustomizableEdges = customizableEdges5;
+            guna2Panel2.CustomizableEdges = customizableEdges7;
             guna2Panel2.Location = new Point(18, 295);
             guna2Panel2.Name = "guna2Panel2";
-            guna2Panel2.ShadowDecoration.CustomizableEdges = customizableEdges6;
+            guna2Panel2.ShadowDecoration.CustomizableEdges = customizableEdges8;
             guna2Panel2.Size = new Size(545, 140);
             guna2Panel2.TabIndex = 1;
             // 
@@ -249,7 +247,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
             // 
             txtCatatan.BorderColor = Color.FromArgb(23, 59, 99);
             txtCatatan.BorderRadius = 8;
-            txtCatatan.CustomizableEdges = customizableEdges7;
+            txtCatatan.CustomizableEdges = customizableEdges5;
             txtCatatan.DefaultText = "";
             txtCatatan.DisabledState.BorderColor = Color.FromArgb(208, 208, 208);
             txtCatatan.DisabledState.FillColor = Color.FromArgb(226, 226, 226);
@@ -265,7 +263,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
             txtCatatan.Name = "txtCatatan";
             txtCatatan.PlaceholderText = "Catatan verifikasi (opsional)...";
             txtCatatan.SelectedText = "";
-            txtCatatan.ShadowDecoration.CustomizableEdges = customizableEdges8;
+            txtCatatan.ShadowDecoration.CustomizableEdges = customizableEdges6;
             txtCatatan.Size = new Size(510, 80);
             txtCatatan.TabIndex = 1;
             // 
@@ -276,7 +274,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
             guna2HtmlLabel6.ForeColor = Color.FromArgb(23, 59, 99);
             guna2HtmlLabel6.Location = new Point(18, 12);
             guna2HtmlLabel6.Name = "guna2HtmlLabel6";
-            guna2HtmlLabel6.Size = new Size(167, 25);
+            guna2HtmlLabel6.Size = new Size(145, 25);
             guna2HtmlLabel6.TabIndex = 0;
             guna2HtmlLabel6.Text = "Catatan Verifikasi";
             // 
@@ -340,7 +338,6 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
             guna2Panel2.ResumeLayout(false);
             guna2Panel2.PerformLayout();
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion

@@ -351,33 +351,11 @@ namespace App_Rental_Proyek.UserControls.Admin.Pembayaran
             int buttonHeight = 30;
             int gap = 3;
 
-            if (status == "diverifikasi")
-            {
-                int half = (cellWidth - (gap * 3)) / 2;
-                buttons.Add(new ActionButtonSpec { Text = "Detail", Color = Color.FromArgb(52, 152, 219),
-                    Bounds = new Rectangle(cellX + 2, cellY + 3, half, buttonHeight) });
-                buttons.Add(new ActionButtonSpec { Text = "Bukti", Color = Color.FromArgb(155, 89, 182),
-                    Bounds = new Rectangle(cellX + gap + 2 + half, cellY + 3, half, buttonHeight) });
-                return buttons;
-            }
-
-            if (status == "ditolak")
-            {
-                buttons.Add(new ActionButtonSpec { Text = "Detail", Color = Color.FromArgb(52, 152, 219),
-                    Bounds = new Rectangle(cellX + 2, cellY + 3, cellWidth - 4, buttonHeight) });
-                return buttons;
-            }
-
-            int part = (cellWidth - (gap * 4)) / 3;
-            int x = cellX + 2;
+            int half = (cellWidth - (gap * 3)) / 2;
             buttons.Add(new ActionButtonSpec { Text = "Detail", Color = Color.FromArgb(52, 152, 219),
-                Bounds = new Rectangle(x, cellY + 3, part, buttonHeight) });
-            x += part + gap;
-            buttons.Add(new ActionButtonSpec { Text = "Verifikasi", Color = Color.FromArgb(46, 204, 113),
-                Bounds = new Rectangle(x, cellY + 3, part, buttonHeight) });
-            x += part + gap;
-            buttons.Add(new ActionButtonSpec { Text = "Tolak", Color = Color.FromArgb(231, 76, 60),
-                Bounds = new Rectangle(x, cellY + 3, part, buttonHeight) });
+                Bounds = new Rectangle(cellX + 2, cellY + 3, half, buttonHeight) });
+            buttons.Add(new ActionButtonSpec { Text = "Bukti", Color = Color.FromArgb(155, 89, 182),
+                Bounds = new Rectangle(cellX + gap + 2 + half, cellY + 3, half, buttonHeight) });
             return buttons;
         }
 
@@ -427,14 +405,12 @@ namespace App_Rental_Proyek.UserControls.Admin.Pembayaran
                 guna2DataGridView1.Columns[e.ColumnIndex].Name == "Action")
             {
                 ulong id = Convert.ToUInt64(guna2DataGridView1.Rows[e.RowIndex].Cells["Id"].Value);
-                string displayStatus = guna2DataGridView1.Rows[e.RowIndex].Cells["Status"].Value?.ToString() ?? "Menunggu";
-                string rawStatus = MapDisplayToRawStatus(displayStatus);
 
                 Rectangle cellRect = guna2DataGridView1.GetCellDisplayRectangle(e.ColumnIndex, e.RowIndex, false);
                 Point clickPoint = guna2DataGridView1.PointToClient(Control.MousePosition);
                 int clickX = clickPoint.X - cellRect.X;
 
-                var buttons = GetActionButtons(rawStatus, cellRect.Width, 0, 0);
+                var buttons = GetActionButtons("", cellRect.Width, 0, 0);
 
                 foreach (var btn in buttons)
                 {
@@ -447,10 +423,6 @@ namespace App_Rental_Proyek.UserControls.Admin.Pembayaran
                         else if (btn.Text == "Bukti")
                         {
                             BukaBukti(id);
-                        }
-                        else
-                        {
-                            ShowVerifikasi(id);
                         }
                         break;
                     }
@@ -466,20 +438,6 @@ namespace App_Rental_Proyek.UserControls.Admin.Pembayaran
             using (var form = new DetailPembayaran(id))
             {
                 form.ShowDialog();
-            }
-        }
-
-        private void ShowVerifikasi(ulong id)
-        {
-            var pembayaran = _allPembayaran.Find(p => p.Id == id);
-            if (pembayaran == null) return;
-
-            using (var form = new VerifikasiPembayaran(pembayaran, GetCurrentUserId()))
-            {
-                if (form.ShowDialog() == DialogResult.OK)
-                {
-                    LoadPembayaran();
-                }
             }
         }
 

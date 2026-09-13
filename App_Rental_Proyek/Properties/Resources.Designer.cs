@@ -133,6 +133,16 @@ namespace App_Rental_Proyek.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap left_right_solid {
+            get {
+                object obj = ResourceManager.GetObject("left-right-solid", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap location_dot_solid {
             get {
                 object obj = ResourceManager.GetObject("location-dot-solid", resourceCulture);
@@ -166,6 +176,16 @@ namespace App_Rental_Proyek.Properties {
         internal static System.Drawing.Bitmap screwdriver_wrench_solid {
             get {
                 object obj = ResourceManager.GetObject("screwdriver-wrench-solid", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap screwdriver_wrench_solid__1_ {
+            get {
+                object obj = ResourceManager.GetObject("screwdriver-wrench-solid (1)", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

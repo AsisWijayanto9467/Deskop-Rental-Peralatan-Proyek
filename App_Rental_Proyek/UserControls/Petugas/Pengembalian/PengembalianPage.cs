@@ -492,9 +492,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pengembalian
 
                 if (!System.IO.File.Exists(fotoPath))
                 {
-                    fotoPath = System.IO.Path.Combine(
-                        "D:\\Cross_Storage\\Sistem_Proyek",
-                        data.Foto);
+                    fotoPath = DokumenHelper.GetFullPath(data.Foto);
                 }
 
                 if (System.IO.File.Exists(fotoPath))

@@ -461,10 +461,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
 
             try
             {
-                string buktiPath = System.IO.Path.Combine(
-                    Application.StartupPath,
-                    "Resources", "BuktiPembayaran",
-                    pembayaran.BuktiPembayaran);
+                string buktiPath = BuktiPembayaranHelper.ResolvePath(pembayaran.BuktiPembayaran);
 
                 if (System.IO.File.Exists(buktiPath))
                 {

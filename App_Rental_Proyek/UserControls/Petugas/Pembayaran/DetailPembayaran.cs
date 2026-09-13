@@ -1,4 +1,5 @@
 using App_Rental_Proyek.Config;
+using App_Rental_Proyek.Helper;
 using MySql.Data.MySqlClient;
 using System;
 using System.Data;
@@ -126,13 +127,10 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
         {
             if (btnLihatBukti.Tag == null) return;
 
-            string fileName = btnLihatBukti.Tag.ToString();
+            string filePath = btnLihatBukti.Tag.ToString();
             try
             {
-                string buktiPath = System.IO.Path.Combine(
-                    Application.StartupPath,
-                    "Resources", "BuktiPembayaran",
-                    fileName);
+                string buktiPath = BuktiPembayaranHelper.ResolvePath(filePath);
 
                 if (System.IO.File.Exists(buktiPath))
                 {

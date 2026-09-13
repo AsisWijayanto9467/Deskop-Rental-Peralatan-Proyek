@@ -89,8 +89,6 @@ namespace App_Rental_Proyek
                 btnPengembalian,
                 btnDenda,
                 btnLaporan,
-                btnLokasi,
-                btnAlatProyek
             };
 
             foreach (Guna.UI2.WinForms.Guna2Button btn in buttons)
@@ -146,16 +144,10 @@ namespace App_Rental_Proyek
 
         private void ShowLokasi()
         {
-            // Ganti dengan UserControl Lokasi yang sesuai
-            // ShowControl(new UserControls.Petugas.Lokasi());
-            SetActiveButton(btnLokasi);
         }
 
         private void ShowAlatProyek()
         {
-            // Ganti dengan UserControl AlatProyek yang sesuai
-            // ShowControl(new UserControls.Petugas.AlatProyek());
-            SetActiveButton(btnAlatProyek);
         }
 
         // ============================================
@@ -243,6 +235,11 @@ namespace App_Rental_Proyek
                     e.Cancel = true;
                 }
             }
+        }
+
+        private void PanelKonten_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

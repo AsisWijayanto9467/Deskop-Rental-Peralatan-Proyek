@@ -70,7 +70,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pengembalian
             lblTitle.ForeColor = Color.White;
             lblTitle.Location = new Point(18, 18);
             lblTitle.Name = "lblTitle";
-            lblTitle.Size = new Size(260, 39);
+            lblTitle.Size = new Size(271, 39);
             lblTitle.TabIndex = 0;
             lblTitle.Text = "Detail Pengembalian";
             // 
@@ -80,7 +80,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pengembalian
             lblStatusDetail.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblStatusDetail.Location = new Point(480, 94);
             lblStatusDetail.Name = "lblStatusDetail";
-            lblStatusDetail.Size = new Size(110, 31);
+            lblStatusDetail.Size = new Size(62, 30);
             lblStatusDetail.TabIndex = 1;
             lblStatusDetail.Text = "Status";
             // 
@@ -91,7 +91,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pengembalian
             lblJudulKode.ForeColor = Color.FromArgb(23, 59, 99);
             lblJudulKode.Location = new Point(18, 88);
             lblJudulKode.Name = "lblJudulKode";
-            lblJudulKode.Size = new Size(230, 39);
+            lblJudulKode.Size = new Size(212, 38);
             lblJudulKode.TabIndex = 2;
             lblJudulKode.Text = "Kode Penyewaan";
             // 
@@ -102,7 +102,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pengembalian
             lblSectionInfo.ForeColor = Color.FromArgb(23, 59, 99);
             lblSectionInfo.Location = new Point(18, 132);
             lblSectionInfo.Name = "lblSectionInfo";
-            lblSectionInfo.Size = new Size(180, 27);
+            lblSectionInfo.Size = new Size(198, 25);
             lblSectionInfo.TabIndex = 3;
             lblSectionInfo.Text = "Informasi Pengembalian";
             // 
@@ -113,7 +113,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pengembalian
             lblInfoTanggal.ForeColor = Color.FromArgb(68, 88, 112);
             lblInfoTanggal.Location = new Point(18, 158);
             lblInfoTanggal.Name = "lblInfoTanggal";
-            lblInfoTanggal.Size = new Size(260, 25);
+            lblInfoTanggal.Size = new Size(194, 25);
             lblInfoTanggal.TabIndex = 4;
             lblInfoTanggal.Text = "Tanggal Pengembalian: -";
             // 
@@ -124,7 +124,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pengembalian
             lblInfoTerlambat.ForeColor = Color.FromArgb(68, 88, 112);
             lblInfoTerlambat.Location = new Point(18, 186);
             lblInfoTerlambat.Name = "lblInfoTerlambat";
-            lblInfoTerlambat.Size = new Size(260, 25);
+            lblInfoTerlambat.Size = new Size(96, 25);
             lblInfoTerlambat.TabIndex = 5;
             lblInfoTerlambat.Text = "Terlambat: -";
             // 
@@ -135,7 +135,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pengembalian
             lblInfoDiterima.ForeColor = Color.FromArgb(68, 88, 112);
             lblInfoDiterima.Location = new Point(18, 214);
             lblInfoDiterima.Name = "lblInfoDiterima";
-            lblInfoDiterima.Size = new Size(260, 25);
+            lblInfoDiterima.Size = new Size(125, 25);
             lblInfoDiterima.TabIndex = 6;
             lblInfoDiterima.Text = "Diterima Oleh: -";
             // 
@@ -146,7 +146,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pengembalian
             lblInfoDibuat.ForeColor = Color.FromArgb(68, 88, 112);
             lblInfoDibuat.Location = new Point(18, 242);
             lblInfoDibuat.Name = "lblInfoDibuat";
-            lblInfoDibuat.Size = new Size(260, 25);
+            lblInfoDibuat.Size = new Size(70, 25);
             lblInfoDibuat.TabIndex = 7;
             lblInfoDibuat.Text = "Dibuat: -";
             // 
@@ -157,7 +157,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pengembalian
             lblSectionCustomer.ForeColor = Color.FromArgb(23, 59, 99);
             lblSectionCustomer.Location = new Point(18, 276);
             lblSectionCustomer.Name = "lblSectionCustomer";
-            lblSectionCustomer.Size = new Size(170, 27);
+            lblSectionCustomer.Size = new Size(161, 25);
             lblSectionCustomer.TabIndex = 8;
             lblSectionCustomer.Text = "Informasi Customer";
             // 
@@ -168,7 +168,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pengembalian
             lblCustNama.ForeColor = Color.FromArgb(68, 88, 112);
             lblCustNama.Location = new Point(18, 302);
             lblCustNama.Name = "lblCustNama";
-            lblCustNama.Size = new Size(300, 25);
+            lblCustNama.Size = new Size(65, 25);
             lblCustNama.TabIndex = 9;
             lblCustNama.Text = "Nama: -";
             // 
@@ -179,7 +179,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pengembalian
             lblCustKode.ForeColor = Color.FromArgb(68, 88, 112);
             lblCustKode.Location = new Point(18, 328);
             lblCustKode.Name = "lblCustKode";
-            lblCustKode.Size = new Size(300, 25);
+            lblCustKode.Size = new Size(102, 25);
             lblCustKode.TabIndex = 10;
             lblCustKode.Text = "Kode Sewa: -";
             // 
@@ -190,7 +190,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pengembalian
             lblSectionKondisi.ForeColor = Color.FromArgb(23, 59, 99);
             lblSectionKondisi.Location = new Point(18, 366);
             lblSectionKondisi.Name = "lblSectionKondisi";
-            lblSectionKondisi.Size = new Size(120, 27);
+            lblSectionKondisi.Size = new Size(100, 25);
             lblSectionKondisi.TabIndex = 11;
             lblSectionKondisi.Text = "Kondisi Alat";
             // 
@@ -213,7 +213,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pengembalian
             lblSectionCatatan.ForeColor = Color.FromArgb(23, 59, 99);
             lblSectionCatatan.Location = new Point(18, 486);
             lblSectionCatatan.Name = "lblSectionCatatan";
-            lblSectionCatatan.Size = new Size(90, 27);
+            lblSectionCatatan.Size = new Size(65, 25);
             lblSectionCatatan.TabIndex = 13;
             lblSectionCatatan.Text = "Catatan";
             // 
@@ -278,7 +278,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pengembalian
             MinimizeBox = false;
             Name = "DetailPengembalian";
             StartPosition = FormStartPosition.CenterParent;
-            Text = "Detail Pengembalian";
+            Text = "saya";
             Load += DetailPengembalian_Load;
             guna2Panel2.ResumeLayout(false);
             guna2Panel2.PerformLayout();

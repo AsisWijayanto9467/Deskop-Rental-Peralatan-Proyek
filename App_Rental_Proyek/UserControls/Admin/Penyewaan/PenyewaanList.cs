@@ -198,34 +198,6 @@ namespace App_Rental_Proyek.UserControls.Admin.Penyewaan
             return list;
         }
 
-        private bool UpdateStatusPenyewaan(ulong id, string newStatus)
-        {
-            try
-            {
-                ulong processedBy = GetCurrentUserId();
-                string query = @"
-                    UPDATE penyewaans
-                    SET status = @status,
-                        processed_by = @processed_by,
-                        updated_at = NOW()
-                    WHERE id = @id";
-
-                MySqlParameter[] parameters = new MySqlParameter[]
-                {
-                    new MySqlParameter("@status", newStatus),
-                    new MySqlParameter("@processed_by", processedBy == 0 ? (object)DBNull.Value : processedBy),
-                    new MySqlParameter("@id", id)
-                };
-                return DatabaseConnection.ExecuteQuery(query, parameters) > 0;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error mengubah status penyewaan: {ex.Message}", "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
-            }
-        }
-
         private ulong GetCurrentUserId()
         {
             try
@@ -421,78 +393,17 @@ namespace App_Rental_Proyek.UserControls.Admin.Penyewaan
         // ============================================
         // ACTION BUTTONS
         // ============================================
-        private bool IsTerminalStatus(string status)
-        {
-            return status == "selesai" || status == "ditolak" || status == "dibatalkan";
-        }
-
-        private string GetProsesText(string status)
-        {
-            switch (status)
-            {
-                case "pending": return "Konfirmasi";
-                case "disetujui": return "Proses";
-                case "menunggu_pembayaran": return "Bayar";
-                case "dibayar": return "Mulai Sewa";
-                case "sedang_disewa": return "Kembalikan";
-                default: return "Proses";
-            }
-        }
-
-        private string GetNextStatus(string currentStatus)
-        {
-            switch (currentStatus)
-            {
-                case "pending": return "disetujui";
-                case "disetujui": return "menunggu_pembayaran";
-                case "menunggu_pembayaran": return "dibayar";
-                case "dibayar": return "sedang_disewa";
-                case "sedang_disewa": return "selesai";
-                default: return currentStatus;
-            }
-        }
-
         private List<ActionButtonSpec> GetActionButtons(string status, int cellWidth, int cellX, int cellY)
         {
             var buttons = new List<ActionButtonSpec>();
-            int buttonHeight = 0;
+            int buttonHeight = 30;
             int gap = 3;
 
-            ActionButtonSpec MakeBtn(string text, Color color, Rectangle rect)
-            {
-                return new ActionButtonSpec { Text = text, Color = color, Bounds = rect };
-            }
-
-            if (IsTerminalStatus(status))
-            {
-                buttonHeight = 30;
-                buttons.Add(MakeBtn("Detail", Color.FromArgb(52, 152, 219),
-                    new Rectangle(cellX + 2, cellY + 3, cellWidth - 4, buttonHeight)));
-                return buttons;
-            }
-
-            if (status == "sedang_disewa")
-            {
-                buttonHeight = 30;
-                int half = (cellWidth - (gap * 3)) / 2;
-                buttons.Add(MakeBtn("Detail", Color.FromArgb(52, 152, 219),
-                    new Rectangle(cellX + 2, cellY + 3, half, buttonHeight)));
-                buttons.Add(MakeBtn("Kembalikan", Color.FromArgb(46, 204, 113),
-                    new Rectangle(cellX + gap + 2 + half, cellY + 3, half, buttonHeight)));
-                return buttons;
-            }
-
-            buttonHeight = 30;
-            int part = (cellWidth - (gap * 4)) / 3;
-            int x = cellX + 2;
-            buttons.Add(MakeBtn("Detail", Color.FromArgb(52, 152, 219),
-                new Rectangle(x, cellY + 3, part, buttonHeight)));
-            x += part + gap;
-            buttons.Add(MakeBtn(GetProsesText(status), Color.FromArgb(46, 204, 113),
-                new Rectangle(x, cellY + 3, part, buttonHeight)));
-            x += part + gap;
-            buttons.Add(MakeBtn("Batalkan", Color.FromArgb(231, 76, 60),
-                new Rectangle(x, cellY + 3, part, buttonHeight)));
+            int half = (cellWidth - (gap * 3)) / 2;
+            buttons.Add(new ActionButtonSpec { Text = "Detail", Color = Color.FromArgb(52, 152, 219),
+                Bounds = new Rectangle(cellX + 2, cellY + 3, half, buttonHeight) });
+            buttons.Add(new ActionButtonSpec { Text = "Bukti", Color = Color.FromArgb(155, 89, 182),
+                Bounds = new Rectangle(cellX + gap + 2 + half, cellY + 3, half, buttonHeight) });
             return buttons;
         }
 
@@ -553,14 +464,12 @@ namespace App_Rental_Proyek.UserControls.Admin.Penyewaan
                 guna2DataGridView1.Columns[e.ColumnIndex].Name == "Action")
             {
                 ulong id = Convert.ToUInt64(guna2DataGridView1.Rows[e.RowIndex].Cells["Id"].Value);
-                string displayStatus = guna2DataGridView1.Rows[e.RowIndex].Cells["Status"].Value?.ToString() ?? "Menunggu";
-                string rawStatus = MapDisplayToRawStatus(displayStatus);
 
                 Rectangle cellRect = guna2DataGridView1.GetCellDisplayRectangle(e.ColumnIndex, e.RowIndex, false);
                 Point clickPoint = guna2DataGridView1.PointToClient(Control.MousePosition);
                 int clickX = clickPoint.X - cellRect.X;
 
-                var buttons = GetActionButtons(rawStatus, cellRect.Width, 0, 0);
+                var buttons = GetActionButtons("", cellRect.Width, 0, 0);
 
                 foreach (var btn in buttons)
                 {
@@ -569,14 +478,6 @@ namespace App_Rental_Proyek.UserControls.Admin.Penyewaan
                         if (btn.Text == "Detail")
                         {
                             ShowDetailPenyewaan(id);
-                        }
-                        else if (btn.Text == "Batalkan")
-                        {
-                            BatalkanPenyewaan(id, rawStatus);
-                        }
-                        else
-                        {
-                            ProsesPenyewaan(id, rawStatus);
                         }
                         break;
                     }
@@ -592,83 +493,6 @@ namespace App_Rental_Proyek.UserControls.Admin.Penyewaan
             using (var form = new DetailPenyewaan(id))
             {
                 form.ShowDialog();
-            }
-        }
-
-        private void ProsesPenyewaan(ulong id, string currentStatus)
-        {
-            var sewa = _allSewa.Find(p => p.Id == id);
-            if (sewa == null) return;
-
-            string nextStatus = GetNextStatus(currentStatus);
-            if (nextStatus == currentStatus)
-            {
-                MessageBox.Show("Status penyewaan sudah berada pada tahap akhir.",
-                    "Informasi", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-
-            string konfirmasi = currentStatus switch
-            {
-                "pending" => $"Konfirmasi penyewaan '{sewa.KodePenyewaan}' dari {sewa.NamaCustomer}?\n\nStatus akan berubah menjadi 'Dikonfirmasi'.",
-                "disetujui" => $"Proses penyewaan '{sewa.KodePenyewaan}'?\n\nStatus akan berubah menjadi 'Menunggu Pembayaran'.",
-                "menunggu_pembayaran" => $"Konfirmasikan pembayaran untuk '{sewa.KodePenyewaan}'?\n\nStatus akan berubah menjadi 'Disiapkan'.",
-                "dibayar" => $"Mulai sewa '{sewa.KodePenyewaan}'?\n\nStatus akan berubah menjadi 'Sedang Disewa'.",
-                "sedang_disewa" => $"Konfirmasi pengembalian alat untuk '{sewa.KodePenyewaan}'?\n\nStatus akan berubah menjadi 'Selesai'.",
-                _ => $"Lanjutkan proses penyewaan '{sewa.KodePenyewaan}'?"
-            };
-
-            DialogResult result = MessageBox.Show(konfirmasi, "Konfirmasi Proses",
-                MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-            if (result == DialogResult.Yes)
-            {
-                if (UpdateStatusPenyewaan(id, nextStatus))
-                {
-                    MessageBox.Show("Status penyewaan berhasil diperbarui!", "Sukses",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    LoadPenyewaan();
-                }
-                else
-                {
-                    MessageBox.Show("Gagal memperbarui status penyewaan.", "Error",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-        }
-
-        private void BatalkanPenyewaan(ulong id, string currentStatus)
-        {
-            var sewa = _allSewa.Find(p => p.Id == id);
-            if (sewa == null) return;
-
-            if (currentStatus == "selesai")
-            {
-                MessageBox.Show("Penyewaan yang sudah selesai tidak dapat dibatalkan.",
-                    "Informasi", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-
-            DialogResult result = MessageBox.Show(
-                $"Apakah Anda yakin ingin membatalkan penyewaan '{sewa.KodePenyewaan}'?\n\n" +
-                "Penyewaan yang dibatalkan tidak dapat diproses kembali.",
-                "Konfirmasi Pembatalan",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Warning);
-
-            if (result == DialogResult.Yes)
-            {
-                if (UpdateStatusPenyewaan(id, "dibatalkan"))
-                {
-                    MessageBox.Show("Penyewaan berhasil dibatalkan!", "Sukses",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    LoadPenyewaan();
-                }
-                else
-                {
-                    MessageBox.Show("Gagal membatalkan penyewaan.", "Error",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
             }
         }
 

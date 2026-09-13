@@ -155,14 +155,14 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pengembalian
                 return;
             }
 
-            try
+try
             {
                 string fotoPath = System.IO.Path.Combine(
                     Application.StartupPath, "Resources", "FotoPengembalian", foto);
 
                 if (!System.IO.File.Exists(fotoPath))
                 {
-                    fotoPath = System.IO.Path.Combine("D:\\Cross_Storage\\Sistem_Proyek", foto);
+                    fotoPath = DokumenHelper.GetFullPath(foto);
                 }
 
                 if (System.IO.File.Exists(fotoPath))
@@ -282,7 +282,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pengembalian
                     {
                         decimal jumlahDenda = _terlambatHari * _dendaPerHari;
                         string insertDenda = @"
-                            INSERT INTO denda
+                            INSERT INTO dendas
                             (penyewaan_id, pengembalian_id, jenis_denda, jumlah, alasan, status, created_at, updated_at)
                             VALUES
                             (@penyewaan_id, @pengembalian_id, 'terlambat', @jumlah, @alasan, 'pending', NOW(), NOW())";
@@ -435,6 +435,11 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pengembalian
             {
                 System.Diagnostics.Debug.WriteLine($"Error update stok alat: {ex.Message}");
             }
+        }
+
+        private void lblDenda_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

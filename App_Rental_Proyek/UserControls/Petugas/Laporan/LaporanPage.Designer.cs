@@ -104,7 +104,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Laporan
             guna2HtmlLabel1.ForeColor = Color.FromArgb(23, 59, 99);
             guna2HtmlLabel1.Location = new Point(16, 20);
             guna2HtmlLabel1.Name = "guna2HtmlLabel1";
-            guna2HtmlLabel1.Size = new Size(120, 39);
+            guna2HtmlLabel1.Size = new Size(108, 39);
             guna2HtmlLabel1.TabIndex = 0;
             guna2HtmlLabel1.Text = "Laporan";
             // 
@@ -115,7 +115,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Laporan
             guna2HtmlLabel2.ForeColor = Color.FromArgb(96, 110, 130);
             guna2HtmlLabel2.Location = new Point(16, 62);
             guna2HtmlLabel2.Name = "guna2HtmlLabel2";
-            guna2HtmlLabel2.Size = new Size(420, 25);
+            guna2HtmlLabel2.Size = new Size(554, 25);
             guna2HtmlLabel2.TabIndex = 1;
             guna2HtmlLabel2.Text = "Lihat hasil transaksi penyewaan, pembayaran, pengembalian, dan denda";
             // 
@@ -134,7 +134,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Laporan
             btnRefresh.Font = new Font("Segoe UI Semibold", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnRefresh.ForeColor = Color.FromArgb(23, 59, 99);
             btnRefresh.ImageSize = new Size(22, 22);
-            btnRefresh.Location = new Point(1060, 58);
+            btnRefresh.Location = new Point(1407, 116);
             btnRefresh.Name = "btnRefresh";
             btnRefresh.ShadowDecoration.CustomizableEdges = customizableEdges2;
             btnRefresh.Size = new Size(130, 44);
@@ -157,7 +157,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Laporan
             btnDownload.Font = new Font("Segoe UI Semibold", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnDownload.ForeColor = Color.White;
             btnDownload.ImageSize = new Size(22, 22);
-            btnDownload.Location = new Point(1200, 58);
+            btnDownload.Location = new Point(1347, 62);
             btnDownload.Name = "btnDownload";
             btnDownload.ShadowDecoration.CustomizableEdges = customizableEdges2;
             btnDownload.Size = new Size(190, 44);
@@ -279,7 +279,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Laporan
             lblStat1Caption.ForeColor = Color.FromArgb(96, 110, 130);
             lblStat1Caption.Location = new Point(18, 48);
             lblStat1Caption.Name = "lblStat1Caption";
-            lblStat1Caption.Size = new Size(140, 24);
+            lblStat1Caption.Size = new Size(37, 23);
             lblStat1Caption.TabIndex = 1;
             lblStat1Caption.Text = "Total";
             // 
@@ -290,7 +290,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Laporan
             lblStat1Value.ForeColor = Color.FromArgb(23, 59, 99);
             lblStat1Value.Location = new Point(16, 12);
             lblStat1Value.Name = "lblStat1Value";
-            lblStat1Value.Size = new Size(24, 39);
+            lblStat1Value.Size = new Size(18, 38);
             lblStat1Value.TabIndex = 0;
             lblStat1Value.Text = "0";
             // 
@@ -316,7 +316,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Laporan
             lblStat2Caption.ForeColor = Color.FromArgb(96, 110, 130);
             lblStat2Caption.Location = new Point(18, 48);
             lblStat2Caption.Name = "lblStat2Caption";
-            lblStat2Caption.Size = new Size(140, 24);
+            lblStat2Caption.Size = new Size(59, 23);
             lblStat2Caption.TabIndex = 1;
             lblStat2Caption.Text = "Status 2";
             // 
@@ -327,7 +327,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Laporan
             lblStat2Value.ForeColor = Color.FromArgb(46, 204, 113);
             lblStat2Value.Location = new Point(16, 12);
             lblStat2Value.Name = "lblStat2Value";
-            lblStat2Value.Size = new Size(24, 39);
+            lblStat2Value.Size = new Size(18, 38);
             lblStat2Value.TabIndex = 0;
             lblStat2Value.Text = "0";
             // 
@@ -353,7 +353,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Laporan
             lblStat3Caption.ForeColor = Color.FromArgb(96, 110, 130);
             lblStat3Caption.Location = new Point(18, 48);
             lblStat3Caption.Name = "lblStat3Caption";
-            lblStat3Caption.Size = new Size(140, 24);
+            lblStat3Caption.Size = new Size(59, 23);
             lblStat3Caption.TabIndex = 1;
             lblStat3Caption.Text = "Status 3";
             // 
@@ -364,7 +364,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Laporan
             lblStat3Value.ForeColor = Color.FromArgb(241, 196, 15);
             lblStat3Value.Location = new Point(16, 12);
             lblStat3Value.Name = "lblStat3Value";
-            lblStat3Value.Size = new Size(24, 39);
+            lblStat3Value.Size = new Size(18, 38);
             lblStat3Value.TabIndex = 0;
             lblStat3Value.Text = "0";
             // 
@@ -390,7 +390,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Laporan
             lblStat4Caption.ForeColor = Color.FromArgb(96, 110, 130);
             lblStat4Caption.Location = new Point(18, 48);
             lblStat4Caption.Name = "lblStat4Caption";
-            lblStat4Caption.Size = new Size(140, 24);
+            lblStat4Caption.Size = new Size(59, 23);
             lblStat4Caption.TabIndex = 1;
             lblStat4Caption.Text = "Status 4";
             // 
@@ -401,7 +401,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Laporan
             lblStat4Value.ForeColor = Color.FromArgb(231, 76, 60);
             lblStat4Value.Location = new Point(16, 12);
             lblStat4Value.Name = "lblStat4Value";
-            lblStat4Value.Size = new Size(24, 39);
+            lblStat4Value.Size = new Size(18, 38);
             lblStat4Value.TabIndex = 0;
             lblStat4Value.Text = "0";
             // 
@@ -503,10 +503,12 @@ namespace App_Rental_Proyek.UserControls.Petugas.Laporan
             dgvPenyewaan.Name = "dgvPenyewaan";
             dgvPenyewaan.RowHeadersVisible = false;
             dgvPenyewaan.RowHeadersWidth = 51;
+            dgvPenyewaan.RowTemplate.Height = 34;
             dgvPenyewaan.Size = new Size(1475, 470);
             dgvPenyewaan.TabIndex = 2;
             dgvPenyewaan.ThemeStyle.AlternatingRowsStyle.BackColor = Color.White;
             dgvPenyewaan.ThemeStyle.BackColor = Color.Silver;
+            dgvPenyewaan.ThemeStyle.HeaderStyle.BackColor = Color.FromArgb(23, 59, 99);
             dgvPenyewaan.ThemeStyle.HeaderStyle.Font = new Font("Segoe UI", 9F);
             dgvPenyewaan.ThemeStyle.HeaderStyle.Height = 40;
             dgvPenyewaan.ThemeStyle.RowsStyle.Font = new Font("Segoe UI", 9F);
@@ -519,7 +521,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Laporan
             lbTotal1.ForeColor = Color.FromArgb(23, 59, 99);
             lbTotal1.Location = new Point(1280, 556);
             lbTotal1.Name = "lbTotal1";
-            lbTotal1.Size = new Size(110, 25);
+            lbTotal1.Size = new Size(98, 25);
             lbTotal1.TabIndex = 5;
             lbTotal1.Text = "Total: 0 data";
             // 
@@ -530,7 +532,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Laporan
             lbHalaman1.ForeColor = Color.FromArgb(23, 59, 99);
             lbHalaman1.Location = new Point(285, 556);
             lbHalaman1.Name = "lbHalaman1";
-            lbHalaman1.Size = new Size(132, 25);
+            lbHalaman1.Size = new Size(130, 25);
             lbHalaman1.TabIndex = 4;
             lbHalaman1.Text = "Halaman 1 dari 1";
             // 
@@ -680,10 +682,12 @@ namespace App_Rental_Proyek.UserControls.Petugas.Laporan
             dgvPembayaran.Name = "dgvPembayaran";
             dgvPembayaran.RowHeadersVisible = false;
             dgvPembayaran.RowHeadersWidth = 51;
+            dgvPembayaran.RowTemplate.Height = 34;
             dgvPembayaran.Size = new Size(1475, 470);
             dgvPembayaran.TabIndex = 2;
             dgvPembayaran.ThemeStyle.AlternatingRowsStyle.BackColor = Color.White;
             dgvPembayaran.ThemeStyle.BackColor = Color.Silver;
+            dgvPembayaran.ThemeStyle.HeaderStyle.BackColor = Color.FromArgb(23, 59, 99);
             dgvPembayaran.ThemeStyle.HeaderStyle.Font = new Font("Segoe UI", 9F);
             dgvPembayaran.ThemeStyle.HeaderStyle.Height = 40;
             dgvPembayaran.ThemeStyle.RowsStyle.Font = new Font("Segoe UI", 9F);
@@ -696,7 +700,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Laporan
             lbTotal2.ForeColor = Color.FromArgb(23, 59, 99);
             lbTotal2.Location = new Point(1280, 556);
             lbTotal2.Name = "lbTotal2";
-            lbTotal2.Size = new Size(110, 25);
+            lbTotal2.Size = new Size(98, 25);
             lbTotal2.TabIndex = 5;
             lbTotal2.Text = "Total: 0 data";
             // 
@@ -707,7 +711,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Laporan
             lbHalaman2.ForeColor = Color.FromArgb(23, 59, 99);
             lbHalaman2.Location = new Point(285, 556);
             lbHalaman2.Name = "lbHalaman2";
-            lbHalaman2.Size = new Size(132, 25);
+            lbHalaman2.Size = new Size(130, 25);
             lbHalaman2.TabIndex = 4;
             lbHalaman2.Text = "Halaman 1 dari 1";
             // 
@@ -857,10 +861,12 @@ namespace App_Rental_Proyek.UserControls.Petugas.Laporan
             dgvPengembalian.Name = "dgvPengembalian";
             dgvPengembalian.RowHeadersVisible = false;
             dgvPengembalian.RowHeadersWidth = 51;
+            dgvPengembalian.RowTemplate.Height = 34;
             dgvPengembalian.Size = new Size(1475, 470);
             dgvPengembalian.TabIndex = 2;
             dgvPengembalian.ThemeStyle.AlternatingRowsStyle.BackColor = Color.White;
             dgvPengembalian.ThemeStyle.BackColor = Color.Silver;
+            dgvPengembalian.ThemeStyle.HeaderStyle.BackColor = Color.FromArgb(23, 59, 99);
             dgvPengembalian.ThemeStyle.HeaderStyle.Font = new Font("Segoe UI", 9F);
             dgvPengembalian.ThemeStyle.HeaderStyle.Height = 40;
             dgvPengembalian.ThemeStyle.RowsStyle.Font = new Font("Segoe UI", 9F);
@@ -873,7 +879,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Laporan
             lbTotal3.ForeColor = Color.FromArgb(23, 59, 99);
             lbTotal3.Location = new Point(1280, 556);
             lbTotal3.Name = "lbTotal3";
-            lbTotal3.Size = new Size(110, 25);
+            lbTotal3.Size = new Size(98, 25);
             lbTotal3.TabIndex = 5;
             lbTotal3.Text = "Total: 0 data";
             // 
@@ -884,7 +890,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Laporan
             lbHalaman3.ForeColor = Color.FromArgb(23, 59, 99);
             lbHalaman3.Location = new Point(285, 556);
             lbHalaman3.Name = "lbHalaman3";
-            lbHalaman3.Size = new Size(132, 25);
+            lbHalaman3.Size = new Size(130, 25);
             lbHalaman3.TabIndex = 4;
             lbHalaman3.Text = "Halaman 1 dari 1";
             // 
@@ -1034,10 +1040,12 @@ namespace App_Rental_Proyek.UserControls.Petugas.Laporan
             dgvDenda.Name = "dgvDenda";
             dgvDenda.RowHeadersVisible = false;
             dgvDenda.RowHeadersWidth = 51;
+            dgvDenda.RowTemplate.Height = 34;
             dgvDenda.Size = new Size(1475, 470);
             dgvDenda.TabIndex = 2;
             dgvDenda.ThemeStyle.AlternatingRowsStyle.BackColor = Color.White;
             dgvDenda.ThemeStyle.BackColor = Color.Silver;
+            dgvDenda.ThemeStyle.HeaderStyle.BackColor = Color.FromArgb(23, 59, 99);
             dgvDenda.ThemeStyle.HeaderStyle.Font = new Font("Segoe UI", 9F);
             dgvDenda.ThemeStyle.HeaderStyle.Height = 40;
             dgvDenda.ThemeStyle.RowsStyle.Font = new Font("Segoe UI", 9F);
@@ -1050,7 +1058,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Laporan
             lbTotal4.ForeColor = Color.FromArgb(23, 59, 99);
             lbTotal4.Location = new Point(1280, 556);
             lbTotal4.Name = "lbTotal4";
-            lbTotal4.Size = new Size(110, 25);
+            lbTotal4.Size = new Size(98, 25);
             lbTotal4.TabIndex = 5;
             lbTotal4.Text = "Total: 0 data";
             // 
@@ -1061,7 +1069,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Laporan
             lbHalaman4.ForeColor = Color.FromArgb(23, 59, 99);
             lbHalaman4.Location = new Point(285, 556);
             lbHalaman4.Name = "lbHalaman4";
-            lbHalaman4.Size = new Size(132, 25);
+            lbHalaman4.Size = new Size(130, 25);
             lbHalaman4.TabIndex = 4;
             lbHalaman4.Text = "Halaman 1 dari 1";
             // 

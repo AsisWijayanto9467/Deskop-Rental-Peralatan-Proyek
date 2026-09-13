@@ -81,7 +81,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pengembalian
             lblTitle.ForeColor = Color.White;
             lblTitle.Location = new Point(18, 18);
             lblTitle.Name = "lblTitle";
-            lblTitle.Size = new Size(280, 39);
+            lblTitle.Size = new Size(298, 39);
             lblTitle.TabIndex = 0;
             lblTitle.Text = "Inspeksi Pengembalian";
             // 
@@ -104,7 +104,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pengembalian
             lblKode.ForeColor = Color.FromArgb(23, 59, 99);
             lblKode.Location = new Point(170, 85);
             lblKode.Name = "lblKode";
-            lblKode.Size = new Size(200, 28);
+            lblKode.Size = new Size(10, 27);
             lblKode.TabIndex = 2;
             lblKode.Text = "-";
             // 
@@ -127,7 +127,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pengembalian
             lblCustomer.ForeColor = Color.FromArgb(68, 88, 112);
             lblCustomer.Location = new Point(170, 115);
             lblCustomer.Name = "lblCustomer";
-            lblCustomer.Size = new Size(500, 28);
+            lblCustomer.Size = new Size(10, 27);
             lblCustomer.TabIndex = 4;
             lblCustomer.Text = "-";
             // 
@@ -150,7 +150,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pengembalian
             lblPeriode.ForeColor = Color.FromArgb(68, 88, 112);
             lblPeriode.Location = new Point(170, 145);
             lblPeriode.Name = "lblPeriode";
-            lblPeriode.Size = new Size(500, 28);
+            lblPeriode.Size = new Size(10, 27);
             lblPeriode.TabIndex = 6;
             lblPeriode.Text = "-";
             // 
@@ -173,7 +173,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pengembalian
             lblTglKembali.ForeColor = Color.FromArgb(68, 88, 112);
             lblTglKembali.Location = new Point(170, 175);
             lblTglKembali.Name = "lblTglKembali";
-            lblTglKembali.Size = new Size(200, 28);
+            lblTglKembali.Size = new Size(10, 27);
             lblTglKembali.TabIndex = 8;
             lblTglKembali.Text = "-";
             // 
@@ -196,7 +196,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pengembalian
             lblTerlambat.ForeColor = Color.FromArgb(68, 88, 112);
             lblTerlambat.Location = new Point(170, 205);
             lblTerlambat.Name = "lblTerlambat";
-            lblTerlambat.Size = new Size(200, 28);
+            lblTerlambat.Size = new Size(10, 27);
             lblTerlambat.TabIndex = 10;
             lblTerlambat.Text = "-";
             // 
@@ -297,6 +297,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pengembalian
             lblDenda.Size = new Size(400, 160);
             lblDenda.TabIndex = 18;
             lblDenda.Text = "-";
+            lblDenda.Click += lblDenda_Click;
             // 
             // lblLabelCatatanInspeksi
             // 

@@ -41,16 +41,13 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges11 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges12 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges13 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges14 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges15 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges16 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges17 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges18 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges19 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges20 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
             btnRefresh = new Guna.UI2.WinForms.Guna2Button();
             guna2HtmlLabel1 = new Guna.UI2.WinForms.Guna2HtmlLabel();
             guna2HtmlLabel2 = new Guna.UI2.WinForms.Guna2HtmlLabel();
@@ -95,7 +92,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
             btnRefresh.Font = new Font("Segoe UI Semibold", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnRefresh.ForeColor = Color.FromArgb(23, 59, 99);
             btnRefresh.ImageSize = new Size(22, 22);
-            btnRefresh.Location = new Point(977, 108);
+            btnRefresh.Location = new Point(1397, 106);
             btnRefresh.Name = "btnRefresh";
             btnRefresh.ShadowDecoration.CustomizableEdges = customizableEdges2;
             btnRefresh.Size = new Size(140, 44);
@@ -110,7 +107,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
             guna2HtmlLabel1.ForeColor = Color.FromArgb(23, 59, 99);
             guna2HtmlLabel1.Location = new Point(16, 22);
             guna2HtmlLabel1.Name = "guna2HtmlLabel1";
-            guna2HtmlLabel1.Size = new Size(182, 39);
+            guna2HtmlLabel1.Size = new Size(164, 39);
             guna2HtmlLabel1.TabIndex = 13;
             guna2HtmlLabel1.Text = "Pembayaran";
             // 
@@ -121,7 +118,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
             guna2HtmlLabel2.ForeColor = Color.FromArgb(96, 110, 130);
             guna2HtmlLabel2.Location = new Point(16, 67);
             guna2HtmlLabel2.Name = "guna2HtmlLabel2";
-            guna2HtmlLabel2.Size = new Size(450, 25);
+            guna2HtmlLabel2.Size = new Size(421, 25);
             guna2HtmlLabel2.TabIndex = 14;
             guna2HtmlLabel2.Text = "Verifikasi pembayaran penyewaan alat proyek dari user";
             // 
@@ -196,7 +193,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
             lblStat1Caption.ForeColor = Color.FromArgb(96, 110, 130);
             lblStat1Caption.Location = new Point(18, 52);
             lblStat1Caption.Name = "lblStat1Caption";
-            lblStat1Caption.Size = new Size(120, 24);
+            lblStat1Caption.Size = new Size(128, 23);
             lblStat1Caption.TabIndex = 1;
             lblStat1Caption.Text = "Total Pembayaran";
             // 
@@ -207,7 +204,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
             lblStat1Value.ForeColor = Color.FromArgb(23, 59, 99);
             lblStat1Value.Location = new Point(16, 12);
             lblStat1Value.Name = "lblStat1Value";
-            lblStat1Value.Size = new Size(24, 39);
+            lblStat1Value.Size = new Size(18, 38);
             lblStat1Value.TabIndex = 0;
             lblStat1Value.Text = "0";
             // 
@@ -233,7 +230,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
             lblStat2Caption.ForeColor = Color.FromArgb(96, 110, 130);
             lblStat2Caption.Location = new Point(18, 52);
             lblStat2Caption.Name = "lblStat2Caption";
-            lblStat2Caption.Size = new Size(150, 24);
+            lblStat2Caption.Size = new Size(147, 23);
             lblStat2Caption.TabIndex = 1;
             lblStat2Caption.Text = "Menunggu Verifikasi";
             // 
@@ -244,7 +241,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
             lblStat2Value.ForeColor = Color.FromArgb(241, 196, 15);
             lblStat2Value.Location = new Point(16, 12);
             lblStat2Value.Name = "lblStat2Value";
-            lblStat2Value.Size = new Size(24, 39);
+            lblStat2Value.Size = new Size(18, 38);
             lblStat2Value.TabIndex = 0;
             lblStat2Value.Text = "0";
             // 
@@ -270,7 +267,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
             lblStat3Caption.ForeColor = Color.FromArgb(96, 110, 130);
             lblStat3Caption.Location = new Point(18, 52);
             lblStat3Caption.Name = "lblStat3Caption";
-            lblStat3Caption.Size = new Size(100, 24);
+            lblStat3Caption.Size = new Size(80, 23);
             lblStat3Caption.TabIndex = 1;
             lblStat3Caption.Text = "Diverifikasi";
             // 
@@ -281,7 +278,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
             lblStat3Value.ForeColor = Color.FromArgb(46, 204, 113);
             lblStat3Value.Location = new Point(16, 12);
             lblStat3Value.Name = "lblStat3Value";
-            lblStat3Value.Size = new Size(24, 39);
+            lblStat3Value.Size = new Size(18, 38);
             lblStat3Value.TabIndex = 0;
             lblStat3Value.Text = "0";
             // 
@@ -307,7 +304,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
             lblStat4Caption.ForeColor = Color.FromArgb(96, 110, 130);
             lblStat4Caption.Location = new Point(18, 52);
             lblStat4Caption.Name = "lblStat4Caption";
-            lblStat4Caption.Size = new Size(80, 24);
+            lblStat4Caption.Size = new Size(52, 23);
             lblStat4Caption.TabIndex = 1;
             lblStat4Caption.Text = "Ditolak";
             // 
@@ -318,7 +315,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
             lblStat4Value.ForeColor = Color.FromArgb(231, 76, 60);
             lblStat4Value.Location = new Point(16, 12);
             lblStat4Value.Name = "lblStat4Value";
-            lblStat4Value.Size = new Size(24, 39);
+            lblStat4Value.Size = new Size(18, 38);
             lblStat4Value.TabIndex = 0;
             lblStat4Value.Text = "0";
             // 
@@ -351,10 +348,12 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
             guna2DataGridView1.Name = "guna2DataGridView1";
             guna2DataGridView1.RowHeadersVisible = false;
             guna2DataGridView1.RowHeadersWidth = 51;
+            guna2DataGridView1.RowTemplate.Height = 34;
             guna2DataGridView1.Size = new Size(1523, 560);
             guna2DataGridView1.TabIndex = 29;
             guna2DataGridView1.ThemeStyle.AlternatingRowsStyle.BackColor = Color.White;
             guna2DataGridView1.ThemeStyle.BackColor = Color.Silver;
+            guna2DataGridView1.ThemeStyle.HeaderStyle.BackColor = Color.FromArgb(23, 59, 99);
             guna2DataGridView1.ThemeStyle.HeaderStyle.Font = new Font("Segoe UI", 9F);
             guna2DataGridView1.ThemeStyle.HeaderStyle.Height = 40;
             guna2DataGridView1.ThemeStyle.RowsStyle.Font = new Font("Segoe UI", 9F);
@@ -367,7 +366,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
             lbTotal.ForeColor = Color.FromArgb(23, 59, 99);
             lbTotal.Location = new Point(1309, 844);
             lbTotal.Name = "lbTotal";
-            lbTotal.Size = new Size(130, 25);
+            lbTotal.Size = new Size(160, 25);
             lbTotal.TabIndex = 32;
             lbTotal.Text = "Total: 0 pembayaran";
             // 
@@ -378,7 +377,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
             lbHalaman.ForeColor = Color.FromArgb(23, 59, 99);
             lbHalaman.Location = new Point(164, 844);
             lbHalaman.Name = "lbHalaman";
-            lbHalaman.Size = new Size(132, 25);
+            lbHalaman.Size = new Size(130, 25);
             lbHalaman.TabIndex = 31;
             lbHalaman.Text = "Halaman 1 dari 1";
             // 
