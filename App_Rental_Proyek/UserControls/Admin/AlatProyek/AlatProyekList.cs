@@ -66,8 +66,8 @@ namespace App_Rental_Proyek.UserControls.Admin
             colAction.Name = "Action";
             colAction.HeaderText = "Aksi";
             colAction.CellTemplate = new DataGridViewTextBoxCell();
-            colAction.Width = 330;
-            colAction.MinimumWidth = 330;
+            colAction.Width = 320;
+            colAction.MinimumWidth = 320;
             guna2DataGridView1.Columns.Add(colAction);
 
             guna2DataGridView1.Columns["Id"].Visible = false;
@@ -81,12 +81,12 @@ namespace App_Rental_Proyek.UserControls.Admin
             guna2DataGridView1.Columns["Nama"].MinimumWidth = 150;
             guna2DataGridView1.Columns["Kategori"].MinimumWidth = 100;
             guna2DataGridView1.Columns["Lokasi"].MinimumWidth = 120;
-            guna2DataGridView1.Columns["Action"].Width = 330;
+            guna2DataGridView1.Columns["Action"].Width = 320;
 
+            // Subscribe event handlers
             guna2DataGridView1.CellPainting += Guna2DataGridView1_CellPainting;
             guna2DataGridView1.CellClick += Guna2DataGridView1_CellClick;
             guna2DataGridView1.CellFormatting += Guna2DataGridView1_CellFormatting;
-            guna2DataGridView1.CellContentClick -= guna2DataGridView1_CellContentClick;
         }
 
         private void InitializeFilters()
@@ -457,6 +457,9 @@ namespace App_Rental_Proyek.UserControls.Admin
             UpdatePaginationInfo(filtered.Count);
         }
 
+        // ============================================
+        // DISPLAY DATA (PERBAIKAN UTAMA)
+        // ============================================
         private void DisplayAlat(List<AlatProyekModel> list)
         {
             guna2DataGridView1.Rows.Clear();
@@ -469,30 +472,31 @@ namespace App_Rental_Proyek.UserControls.Admin
 
             foreach (var a in list)
             {
-                int rowIndex = guna2DataGridView1.Rows.Add(
-                    a.Id,
-                    a.KodeAlat,
-                    a.NamaAlat,
-                    a.NamaKategori ?? "-",
-                    a.NamaLokasi ?? "-",
-                    "Rp " + a.HargaSewaHarian.ToString("N0"),
-                    a.Stok,
-                    a.StokTersedia,
-                    FormatKondisi(a.Kondisi),
-                    a.Status,
-                    ""
-                );
+                int rowIndex = guna2DataGridView1.Rows.Add();
+                var row = guna2DataGridView1.Rows[rowIndex];
+
+                // Isi per nama kolom agar tidak bergantung pada urutan kolom
+                row.Cells["Id"].Value = a.Id;
+                row.Cells["Kode"].Value = a.KodeAlat;
+                row.Cells["Nama"].Value = a.NamaAlat;
+                row.Cells["Kategori"].Value = a.NamaKategori ?? "-";
+                row.Cells["Lokasi"].Value = a.NamaLokasi ?? "-";
+                row.Cells["Harga"].Value = "Rp " + a.HargaSewaHarian.ToString("N0");
+                row.Cells["Stok"].Value = a.Stok;
+                row.Cells["StokTersedia"].Value = a.StokTersedia;
+                row.Cells["Kondisi"].Value = FormatKondisi(a.Kondisi);
+                row.Cells["Status"].Value = a.Status;
+                row.Cells["Gambar"].Value = LoadThumbnail(a.Gambar);
+                row.Cells["Action"].Value = "";
 
                 if (a.Status == "tidak_aktif")
                 {
-                    guna2DataGridView1.Rows[rowIndex].DefaultCellStyle.ForeColor = Color.Gray;
+                    row.DefaultCellStyle.ForeColor = Color.Gray;
                 }
                 else if (a.Status == "disewa")
                 {
-                    guna2DataGridView1.Rows[rowIndex].DefaultCellStyle.ForeColor = Color.FromArgb(230, 126, 34);
+                    row.DefaultCellStyle.ForeColor = Color.FromArgb(230, 126, 34);
                 }
-
-                guna2DataGridView1.Rows[rowIndex].Cells["Gambar"].Value = LoadThumbnail(a.Gambar);
             }
         }
 
@@ -627,41 +631,57 @@ namespace App_Rental_Proyek.UserControls.Admin
             }
         }
 
+        // ============================================
+        // CELL CLICK (PERBAIKAN)
+        // ============================================
         private void Guna2DataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex >= 0 && e.ColumnIndex >= 0 &&
-                guna2DataGridView1.Columns[e.ColumnIndex].Name == "Action")
+            if (e.RowIndex < 0 || e.ColumnIndex < 0) return;
+            if (guna2DataGridView1.Columns[e.ColumnIndex].Name != "Action") return;
+
+            // Ambil ID dari kolom "Id"
+            var idCell = guna2DataGridView1.Rows[e.RowIndex].Cells["Id"].Value;
+            if (idCell == null || idCell == DBNull.Value)
             {
-                var alatId = Convert.ToUInt64(guna2DataGridView1.Rows[e.RowIndex].Cells["Id"].Value);
-                var status = guna2DataGridView1.Rows[e.RowIndex].Cells["Status"].Value?.ToString() ?? "tersedia";
-
-                Rectangle cellRect = guna2DataGridView1.GetCellDisplayRectangle(e.ColumnIndex, e.RowIndex, false);
-                Point clickPoint = guna2DataGridView1.PointToClient(Control.MousePosition);
-                int clickX = clickPoint.X - cellRect.X;
-                int quarterWidth = cellRect.Width / 4;
-
-                if (clickX < quarterWidth)
-                {
-                    ShowEditAlatForm(alatId);
-                }
-                else if (clickX < (2 * quarterWidth))
-                {
-                    ShowRiwayatAlat(alatId);
-                }
-                else if (clickX < (3 * quarterWidth))
-                {
-                    ToggleStatus(alatId, status);
-                }
-                else
-                {
-                    DeleteAlatLog(alatId);
-                }
+                MessageBox.Show("ID alat tidak valid!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
-        }
 
-        private void guna2DataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-            // Fungsi ditangani oleh Guna2DataGridView1_CellClick
+            ulong alatId;
+            try
+            {
+                alatId = Convert.ToUInt64(idCell);
+            }
+            catch
+            {
+                MessageBox.Show("ID alat tidak valid!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            string status = guna2DataGridView1.Rows[e.RowIndex].Cells["Status"].Value?.ToString() ?? "tersedia";
+
+            // Hitung posisi klik relatif ke sel
+            Rectangle cellRect = guna2DataGridView1.GetCellDisplayRectangle(e.ColumnIndex, e.RowIndex, false);
+            Point mouse = guna2DataGridView1.PointToClient(Cursor.Position);
+            int clickX = mouse.X - cellRect.X;
+            int quarter = cellRect.Width / 4;
+
+            if (clickX < quarter)
+            {
+                ShowEditAlatForm(alatId);
+            }
+            else if (clickX < 2 * quarter)
+            {
+                ShowRiwayatAlat(alatId);
+            }
+            else if (clickX < 3 * quarter)
+            {
+                ToggleStatus(alatId, status);
+            }
+            else
+            {
+                DeleteAlatLog(alatId);
+            }
         }
 
         // ============================================
