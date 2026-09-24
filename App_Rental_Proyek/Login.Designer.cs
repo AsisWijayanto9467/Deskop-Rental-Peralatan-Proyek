@@ -222,6 +222,7 @@
             // 
             pictureBox4.BackColor = Color.Transparent;
             pictureBox4.BackgroundImageLayout = ImageLayout.Center;
+            pictureBox4.Image = Properties.Resources.square_check_solid;
             pictureBox4.Location = new Point(32, 46);
             pictureBox4.Name = "pictureBox4";
             pictureBox4.Size = new Size(32, 32);

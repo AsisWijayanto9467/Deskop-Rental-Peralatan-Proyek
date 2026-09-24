@@ -1,4 +1,5 @@
 using App_Rental_Proyek.Config;
+using App_Rental_Proyek.Helper;
 using MySql.Data.MySqlClient;
 using System;
 using System.Data;
@@ -10,6 +11,15 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pengembalian
     public partial class DetailPengembalian : Form
     {
         private ulong _pengembalianId;
+        private string _kodePenyewaan = "";
+        private DateTime _tanggalPengembalian;
+        private string _namaCustomer = "";
+        private string _noTelepon = "";
+        private string _kondisiAlat = "";
+        private int _terlambatHari = 0;
+        private string _namaPetugas = "";
+        private string _status = "";
+        private string _catatan = "";
 
         public DetailPengembalian(ulong pengembalianId)
         {
@@ -65,6 +75,16 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pengembalian
                 DataRow row = dt.Rows[0];
 
                 string status = row["status"]?.ToString() ?? "menunggu_inspeksi";
+
+                _kodePenyewaan = row["kode_penyewaan"]?.ToString() ?? "";
+                _tanggalPengembalian = row["tanggal_pengembalian"] != DBNull.Value ? Convert.ToDateTime(row["tanggal_pengembalian"]) : DateTime.Now;
+                _namaCustomer = row["nama_customer"]?.ToString() ?? "";
+                _noTelepon = ""; // User detail not shown in this form, use empty
+                _kondisiAlat = row["kondisi_alat"]?.ToString() ?? "-";
+                _terlambatHari = row["terlambat_hari"] != DBNull.Value ? Convert.ToInt32(row["terlambat_hari"]) : 0;
+                _namaPetugas = row["nama_diterima"]?.ToString() ?? "-";
+                _status = status;
+                _catatan = row["catatan"]?.ToString() ?? "";
 
                 lblJudulKode.Text = $"Kode Sewa: {(row["kode_penyewaan"]?.ToString() ?? "-")}";
                 lblStatusDetail.Text = FormatStatusLabel(status);
@@ -134,6 +154,87 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pengembalian
         private void btnTutup_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void btnCetakStruk_Click(object sender, EventArgs e)
+        {
+            string filePath = StrukHelper.GenerateStrukPengembalian(
+                _kodePenyewaan,
+                _tanggalPengembalian,
+                _namaCustomer,
+                _noTelepon,
+                _kondisiAlat,
+                _terlambatHari,
+                _namaPetugas,
+                _status,
+                _catatan);
+
+            if (!string.IsNullOrEmpty(filePath))
+            {
+                StrukHelper.OpenAndPrintStruk(filePath);
+            }
+        }
+
+        private void btnDownloadStruk_Click(object sender, EventArgs e)
+        {
+            string filePath = StrukHelper.GenerateStrukPengembalian(
+                _kodePenyewaan,
+                _tanggalPengembalian,
+                _namaCustomer,
+                _noTelepon,
+                _kondisiAlat,
+                _terlambatHari,
+                _namaPetugas,
+                _status,
+                _catatan);
+
+            if (!string.IsNullOrEmpty(filePath))
+            {
+                StrukHelper.DownloadStruk(filePath);
+            }
+        }
+
+        private void lblKondisi_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnDownloadStruk1_Click(object sender, EventArgs e)
+        {
+            string filePath = StrukHelper.GenerateStrukPengembalian(
+                _kodePenyewaan,
+                _tanggalPengembalian,
+                _namaCustomer,
+                _noTelepon,
+                _kondisiAlat,
+                _terlambatHari,
+                _namaPetugas,
+                _status,
+                _catatan);
+
+            if (!string.IsNullOrEmpty(filePath))
+            {
+                StrukHelper.DownloadStruk(filePath);
+            }
+        }
+
+        private void btnCetakStruk1_Click(object sender, EventArgs e)
+        {
+            string filePath = StrukHelper.GenerateStrukPengembalian(
+                _kodePenyewaan,
+                _tanggalPengembalian,
+                _namaCustomer,
+                _noTelepon,
+                _kondisiAlat,
+                _terlambatHari,
+                _namaPetugas,
+                _status,
+                _catatan);
+
+            if (!string.IsNullOrEmpty(filePath))
+            {
+                StrukHelper.OpenAndPrintStruk(filePath);
+            }
         }
     }
 }

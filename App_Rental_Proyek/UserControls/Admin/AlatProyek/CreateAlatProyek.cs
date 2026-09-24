@@ -33,7 +33,6 @@ namespace App_Rental_Proyek.UserControls.Admin.AlatProyek
 
         private void SetupComboboxes()
         {
-            // Kategori
             try
             {
                 DataTable dt = DatabaseConnection.GetData(
@@ -51,7 +50,6 @@ namespace App_Rental_Proyek.UserControls.Admin.AlatProyek
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
-            // Lokasi
             try
             {
                 DataTable dt = DatabaseConnection.GetData(
@@ -68,15 +66,13 @@ namespace App_Rental_Proyek.UserControls.Admin.AlatProyek
                 MessageBox.Show($"Gagal memuat data lokasi: {ex.Message}", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
-            // Kondisi
+            
             cbKondisi.Items.Clear();
             cbKondisi.Items.Add("baik");
             cbKondisi.Items.Add("rusak_ringan");
             cbKondisi.Items.Add("rusak_berat");
             cbKondisi.SelectedIndex = 0;
 
-            // Status
             cbStatus.Items.Clear();
             cbStatus.Items.Add("tersedia");
             cbStatus.Items.Add("disewa");

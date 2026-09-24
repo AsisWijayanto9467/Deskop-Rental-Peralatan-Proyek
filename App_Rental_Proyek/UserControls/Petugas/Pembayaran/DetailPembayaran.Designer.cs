@@ -7,6 +7,9 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
+        private Guna.UI2.WinForms.Guna2Button btnCetakStruk;
+        private Guna.UI2.WinForms.Guna2Button btnDownloadStruk;
+
         /// <summary>
         /// Clean up any resources being used.
         /// </summary>
@@ -38,6 +41,8 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges8 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges9 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges10 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges11 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges12 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             guna2Panel1 = new Guna.UI2.WinForms.Guna2Panel();
             lblStatus = new Guna.UI2.WinForms.Guna2HtmlLabel();
             lblKodePembayaran = new Guna.UI2.WinForms.Guna2HtmlLabel();
@@ -62,6 +67,8 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
             lblTanggalVerif = new Guna.UI2.WinForms.Guna2HtmlLabel();
             lblCatatan = new Guna.UI2.WinForms.Guna2HtmlLabel();
             btnTutup = new Guna.UI2.WinForms.Guna2Button();
+            btnCetakStruk = new Guna.UI2.WinForms.Guna2Button();
+            btnDownloadStruk = new Guna.UI2.WinForms.Guna2Button();
             guna2Panel1.SuspendLayout();
             guna2Panel2.SuspendLayout();
             guna2Panel3.SuspendLayout();
@@ -90,7 +97,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
             lblStatus.ForeColor = Color.FromArgb(241, 196, 15);
             lblStatus.Location = new Point(410, 35);
             lblStatus.Name = "lblStatus";
-            lblStatus.Size = new Size(95, 27);
+            lblStatus.Size = new Size(104, 27);
             lblStatus.TabIndex = 2;
             lblStatus.Text = "⏳ Pending";
             // 
@@ -101,7 +108,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
             lblKodePembayaran.ForeColor = Color.FromArgb(23, 59, 99);
             lblKodePembayaran.Location = new Point(17, 30);
             lblKodePembayaran.Name = "lblKodePembayaran";
-            lblKodePembayaran.Size = new Size(195, 34);
+            lblKodePembayaran.Size = new Size(208, 33);
             lblKodePembayaran.TabIndex = 1;
             lblKodePembayaran.Text = "PAY-20260902-001";
             // 
@@ -112,7 +119,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
             guna2HtmlLabel1.ForeColor = Color.FromArgb(96, 110, 130);
             guna2HtmlLabel1.Location = new Point(17, 10);
             guna2HtmlLabel1.Name = "guna2HtmlLabel1";
-            guna2HtmlLabel1.Size = new Size(119, 22);
+            guna2HtmlLabel1.Size = new Size(129, 22);
             guna2HtmlLabel1.TabIndex = 0;
             guna2HtmlLabel1.Text = "Detail Pembayaran";
             // 
@@ -140,7 +147,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
             lblStatusPenyewaan.ForeColor = Color.FromArgb(96, 110, 130);
             lblStatusPenyewaan.Location = new Point(17, 72);
             lblStatusPenyewaan.Name = "lblStatusPenyewaan";
-            lblStatusPenyewaan.Size = new Size(219, 22);
+            lblStatusPenyewaan.Size = new Size(285, 22);
             lblStatusPenyewaan.TabIndex = 3;
             lblStatusPenyewaan.Text = "Status Penyewaan: Menunggu Pembayaran";
             // 
@@ -151,7 +158,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
             lblTotalSewa.ForeColor = Color.FromArgb(96, 110, 130);
             lblTotalSewa.Location = new Point(17, 52);
             lblTotalSewa.Name = "lblTotalSewa";
-            lblTotalSewa.Size = new Size(145, 22);
+            lblTotalSewa.Size = new Size(113, 22);
             lblTotalSewa.TabIndex = 2;
             lblTotalSewa.Text = "Total Sewa: Rp 0";
             // 
@@ -162,7 +169,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
             lblKodePenyewaan.ForeColor = Color.FromArgb(23, 59, 99);
             lblKodePenyewaan.Location = new Point(17, 27);
             lblKodePenyewaan.Name = "lblKodePenyewaan";
-            lblKodePenyewaan.Size = new Size(175, 27);
+            lblKodePenyewaan.Size = new Size(174, 27);
             lblKodePenyewaan.TabIndex = 1;
             lblKodePenyewaan.Text = "RENT-20260902-001";
             // 
@@ -173,7 +180,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
             guna2HtmlLabel2.ForeColor = Color.FromArgb(96, 110, 130);
             guna2HtmlLabel2.Location = new Point(17, 7);
             guna2HtmlLabel2.Name = "guna2HtmlLabel2";
-            guna2HtmlLabel2.Size = new Size(142, 22);
+            guna2HtmlLabel2.Size = new Size(143, 22);
             guna2HtmlLabel2.TabIndex = 0;
             guna2HtmlLabel2.Text = "Informasi Penyewaan";
             // 
@@ -202,7 +209,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
             lblAlamat.ForeColor = Color.FromArgb(96, 110, 130);
             lblAlamat.Location = new Point(17, 92);
             lblAlamat.Name = "lblAlamat";
-            lblAlamat.Size = new Size(63, 22);
+            lblAlamat.Size = new Size(64, 22);
             lblAlamat.TabIndex = 4;
             lblAlamat.Text = "Alamat: -";
             // 
@@ -213,7 +220,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
             lblTelepon.ForeColor = Color.FromArgb(96, 110, 130);
             lblTelepon.Location = new Point(17, 72);
             lblTelepon.Name = "lblTelepon";
-            lblTelepon.Size = new Size(72, 22);
+            lblTelepon.Size = new Size(70, 22);
             lblTelepon.TabIndex = 3;
             lblTelepon.Text = "Telepon: -";
             // 
@@ -224,7 +231,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
             lblEmail.ForeColor = Color.FromArgb(96, 110, 130);
             lblEmail.Location = new Point(17, 52);
             lblEmail.Name = "lblEmail";
-            lblEmail.Size = new Size(56, 22);
+            lblEmail.Size = new Size(53, 22);
             lblEmail.TabIndex = 2;
             lblEmail.Text = "Email: -";
             // 
@@ -235,7 +242,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
             lblCustomer.ForeColor = Color.FromArgb(23, 59, 99);
             lblCustomer.Location = new Point(17, 27);
             lblCustomer.Name = "lblCustomer";
-            lblCustomer.Size = new Size(126, 27);
+            lblCustomer.Size = new Size(139, 27);
             lblCustomer.TabIndex = 1;
             lblCustomer.Text = "Nama Customer";
             // 
@@ -246,7 +253,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
             guna2HtmlLabel3.ForeColor = Color.FromArgb(96, 110, 130);
             guna2HtmlLabel3.Location = new Point(17, 7);
             guna2HtmlLabel3.Name = "guna2HtmlLabel3";
-            guna2HtmlLabel3.Size = new Size(136, 22);
+            guna2HtmlLabel3.Size = new Size(132, 22);
             guna2HtmlLabel3.TabIndex = 0;
             guna2HtmlLabel3.Text = "Informasi Customer";
             // 
@@ -257,7 +264,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
             lblTanggalBayar.ForeColor = Color.FromArgb(23, 59, 99);
             lblTanggalBayar.Location = new Point(25, 365);
             lblTanggalBayar.Name = "lblTanggalBayar";
-            lblTanggalBayar.Size = new Size(211, 25);
+            lblTanggalBayar.Size = new Size(189, 25);
             lblTanggalBayar.TabIndex = 3;
             lblTanggalBayar.Text = "Tanggal Pembayaran: -";
             // 
@@ -268,7 +275,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
             lblJumlah.ForeColor = Color.FromArgb(23, 59, 99);
             lblJumlah.Location = new Point(25, 395);
             lblJumlah.Name = "lblJumlah";
-            lblJumlah.Size = new Size(106, 25);
+            lblJumlah.Size = new Size(108, 25);
             lblJumlah.TabIndex = 4;
             lblJumlah.Text = "Jumlah: Rp 0";
             // 
@@ -279,7 +286,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
             lblMetode.ForeColor = Color.FromArgb(96, 110, 130);
             lblMetode.Location = new Point(25, 425);
             lblMetode.Name = "lblMetode";
-            lblMetode.Size = new Size(107, 25);
+            lblMetode.Size = new Size(108, 25);
             lblMetode.TabIndex = 5;
             lblMetode.Text = "Metode: Cash";
             // 
@@ -290,7 +297,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
             lblBukti.ForeColor = Color.FromArgb(96, 110, 130);
             lblBukti.Location = new Point(25, 455);
             lblBukti.Name = "lblBukti";
-            lblBukti.Size = new Size(110, 25);
+            lblBukti.Size = new Size(123, 25);
             lblBukti.TabIndex = 6;
             lblBukti.Text = "Bukti: Tidak ada";
             // 
@@ -320,7 +327,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
             lblVerifikator.ForeColor = Color.FromArgb(96, 110, 130);
             lblVerifikator.Location = new Point(25, 535);
             lblVerifikator.Name = "lblVerifikator";
-            lblVerifikator.Size = new Size(185, 25);
+            lblVerifikator.Size = new Size(140, 25);
             lblVerifikator.TabIndex = 8;
             lblVerifikator.Text = "Diverifikasi Oleh: -";
             // 
@@ -331,7 +338,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
             lblTanggalVerif.ForeColor = Color.FromArgb(96, 110, 130);
             lblTanggalVerif.Location = new Point(25, 560);
             lblTanggalVerif.Name = "lblTanggalVerif";
-            lblTanggalVerif.Size = new Size(187, 25);
+            lblTanggalVerif.Size = new Size(152, 25);
             lblTanggalVerif.TabIndex = 9;
             lblTanggalVerif.Text = "Tanggal Verifikasi: -";
             // 
@@ -342,7 +349,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
             lblCatatan.ForeColor = Color.FromArgb(96, 110, 130);
             lblCatatan.Location = new Point(25, 590);
             lblCatatan.Name = "lblCatatan";
-            lblCatatan.Size = new Size(85, 25);
+            lblCatatan.Size = new Size(79, 25);
             lblCatatan.TabIndex = 10;
             lblCatatan.Text = "Catatan: -";
             // 
@@ -357,20 +364,60 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
             btnTutup.FillColor = Color.FromArgb(231, 76, 60);
             btnTutup.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
             btnTutup.ForeColor = Color.White;
-            btnTutup.Location = new Point(413, 630);
+            btnTutup.Location = new Point(413, 570);
             btnTutup.Name = "btnTutup";
             btnTutup.ShadowDecoration.CustomizableEdges = customizableEdges10;
             btnTutup.Size = new Size(150, 45);
-            btnTutup.TabIndex = 11;
+            btnTutup.TabIndex = 13;
             btnTutup.Text = "Tutup";
             btnTutup.Click += btnTutup_Click;
+            // 
+            // btnCetakStruk
+            // 
+            btnCetakStruk.BorderRadius = 8;
+            btnCetakStruk.CustomizableEdges = customizableEdges9;
+            btnCetakStruk.DisabledState.BorderColor = Color.DarkGray;
+            btnCetakStruk.DisabledState.CustomBorderColor = Color.DarkGray;
+            btnCetakStruk.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
+            btnCetakStruk.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
+            btnCetakStruk.FillColor = Color.FromArgb(46, 204, 113);
+            btnCetakStruk.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
+            btnCetakStruk.ForeColor = Color.White;
+            btnCetakStruk.Location = new Point(433, 365);
+            btnCetakStruk.Name = "btnCetakStruk";
+            btnCetakStruk.ShadowDecoration.CustomizableEdges = customizableEdges10;
+            btnCetakStruk.Size = new Size(130, 45);
+            btnCetakStruk.TabIndex = 11;
+            btnCetakStruk.Text = "Cetak Struk";
+            btnCetakStruk.Click += btnCetakStruk_Click;
+            // 
+            // btnDownloadStruk
+            // 
+            btnDownloadStruk.BorderRadius = 8;
+            btnDownloadStruk.CustomizableEdges = customizableEdges11;
+            btnDownloadStruk.DisabledState.BorderColor = Color.DarkGray;
+            btnDownloadStruk.DisabledState.CustomBorderColor = Color.DarkGray;
+            btnDownloadStruk.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
+            btnDownloadStruk.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
+            btnDownloadStruk.FillColor = Color.FromArgb(52, 152, 219);
+            btnDownloadStruk.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
+            btnDownloadStruk.ForeColor = Color.White;
+            btnDownloadStruk.Location = new Point(391, 515);
+            btnDownloadStruk.Name = "btnDownloadStruk";
+            btnDownloadStruk.ShadowDecoration.CustomizableEdges = customizableEdges12;
+            btnDownloadStruk.Size = new Size(172, 45);
+            btnDownloadStruk.TabIndex = 12;
+            btnDownloadStruk.Text = "Download Struk";
+            btnDownloadStruk.Click += btnDownloadStruk_Click;
             // 
             // DetailPembayaran
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(236, 240, 241);
-            ClientSize = new Size(582, 693);
+            ClientSize = new Size(582, 659);
+            Controls.Add(btnDownloadStruk);
+            Controls.Add(btnCetakStruk);
             Controls.Add(btnTutup);
             Controls.Add(lblCatatan);
             Controls.Add(lblTanggalVerif);

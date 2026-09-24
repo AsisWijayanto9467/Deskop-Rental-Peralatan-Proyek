@@ -11,11 +11,12 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pengembalian
 {
     public partial class InspeksiPengembalian : Form
     {
-        private ulong _pengembalianId;
+private ulong _pengembalianId;
         private ulong _penyewaanId;
         private decimal _totalSewa;
         private int _terlambatHari;
         private decimal _dendaPerHari = 10000m;
+        private string _status = "";
 
         public InspeksiPengembalian(ulong pengembalianId)
         {
@@ -117,6 +118,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pengembalian
                 HitungDenda();
 
                 string status = row["status"]?.ToString() ?? "menunggu_inspeksi";
+                _status = status;
                 if (status != "menunggu_inspeksi")
                 {
                     btnTerima.Enabled = false;
@@ -437,9 +439,47 @@ try
             }
         }
 
-        private void lblDenda_Click(object sender, EventArgs e)
+private void lblDenda_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnCetakStruk_Click(object sender, EventArgs e)
+        {
+            string filePath = StrukHelper.GenerateStrukPengembalian(
+                lblKode.Text,
+                Convert.ToDateTime(lblTglKembali.Text),
+                lblCustomer.Text,
+                "", // no telepon shown in this form
+                lblKondisiUser.Text,
+                _terlambatHari,
+                SessionManager.CurrentUser.Nama,
+                _status,
+                lblCatatanUser.Text);
+
+            if (!string.IsNullOrEmpty(filePath))
+            {
+                StrukHelper.OpenAndPrintStruk(filePath);
+            }
+        }
+
+        private void btnDownloadStruk_Click(object sender, EventArgs e)
+        {
+            string filePath = StrukHelper.GenerateStrukPengembalian(
+                lblKode.Text,
+                Convert.ToDateTime(lblTglKembali.Text),
+                lblCustomer.Text,
+                "", // no telepon shown in this form
+                lblKondisiUser.Text,
+                _terlambatHari,
+                SessionManager.CurrentUser.Nama,
+                _status,
+                lblCatatanUser.Text);
+
+            if (!string.IsNullOrEmpty(filePath))
+            {
+                StrukHelper.DownloadStruk(filePath);
+            }
         }
     }
 }

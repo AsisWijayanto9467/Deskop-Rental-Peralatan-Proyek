@@ -385,6 +385,49 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pengembalian
             btnTerima.Text = "Diterima";
             btnTerima.Click += btnTerima_Click;
             // 
+            // btnCetakStruk
+            // 
+            btnCetakStruk.BackColor = Color.Transparent;
+            btnCetakStruk.BorderColor = Color.FromArgb(46, 204, 113);
+            btnCetakStruk.BorderRadius = 17;
+            btnCetakStruk.BorderThickness = 2;
+            btnCetakStruk.DisabledState.BorderColor = Color.DarkGray;
+            btnCetakStruk.DisabledState.CustomBorderColor = Color.DarkGray;
+            btnCetakStruk.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
+            btnCetakStruk.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
+            btnCetakStruk.FillColor = Color.FromArgb(46, 204, 113);
+            btnCetakStruk.Font = new Font("Segoe UI Semibold", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnCetakStruk.ForeColor = Color.White;
+            btnCetakStruk.ImageSize = new Size(22, 22);
+            btnCetakStruk.Location = new Point(20, 756);
+            btnCetakStruk.Name = "btnCetakStruk";
+            btnCetakStruk.ShadowDecoration.CustomizableEdges = customizableEdges7;
+            btnCetakStruk.Size = new Size(156, 46);
+            btnCetakStruk.TabIndex = 23;
+            btnCetakStruk.Text = "Cetak Struk";
+            btnCetakStruk.Click += btnCetakStruk_Click;
+            // 
+            // btnDownloadStruk
+            // 
+            btnDownloadStruk.BackColor = Color.Transparent;
+            btnDownloadStruk.BorderColor = Color.FromArgb(241, 196, 15);
+            btnDownloadStruk.BorderRadius = 17;
+            btnDownloadStruk.BorderThickness = 2;
+            btnDownloadStruk.DisabledState.BorderColor = Color.DarkGray;
+            btnDownloadStruk.DisabledState.CustomBorderColor = Color.DarkGray;
+            btnDownloadStruk.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
+            btnDownloadStruk.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
+            btnDownloadStruk.FillColor = Color.FromArgb(241, 196, 15);
+            btnDownloadStruk.Font = new Font("Segoe UI Semibold", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnDownloadStruk.ForeColor = Color.White;
+            btnDownloadStruk.ImageSize = new Size(22, 22);
+            btnDownloadStruk.Location = new Point(186, 756);
+            btnDownloadStruk.Name = "btnDownloadStruk";
+            btnDownloadStruk.Size = new Size(156, 46);
+            btnDownloadStruk.TabIndex = 24;
+            btnDownloadStruk.Text = "Download Struk";
+            btnDownloadStruk.Click += btnDownloadStruk_Click;
+            // 
             // InspeksiPengembalian
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -451,7 +494,9 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pengembalian
         private Guna.UI2.WinForms.Guna2HtmlLabel lblDenda;
         private Guna.UI2.WinForms.Guna2HtmlLabel lblLabelCatatanInspeksi;
         private Guna.UI2.WinForms.Guna2TextBox txtCatatanInspeksi;
-        private Guna.UI2.WinForms.Guna2Button btnTolak;
+private Guna.UI2.WinForms.Guna2Button btnTolak;
         private Guna.UI2.WinForms.Guna2Button btnTerima;
+        private Guna.UI2.WinForms.Guna2Button btnCetakStruk;
+        private Guna.UI2.WinForms.Guna2Button btnDownloadStruk;
     }
 }

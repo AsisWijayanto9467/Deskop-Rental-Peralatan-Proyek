@@ -58,6 +58,8 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
             guna2HtmlLabel6 = new Guna.UI2.WinForms.Guna2HtmlLabel();
             btnBatal = new Guna.UI2.WinForms.Guna2Button();
             btnSimpan = new Guna.UI2.WinForms.Guna2Button();
+            btnCetakStruk = new Guna.UI2.WinForms.Guna2Button();
+            btnDownloadStruk = new Guna.UI2.WinForms.Guna2Button();
             guna2Panel1.SuspendLayout();
             guna2Panel2.SuspendLayout();
             SuspendLayout();
@@ -316,12 +318,52 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
             btnSimpan.Text = "Verifikasi";
             btnSimpan.Click += btnSimpan_Click;
             // 
+            // btnCetakStruk
+            // 
+            btnCetakStruk.BorderRadius = 8;
+            btnCetakStruk.CustomizableEdges = customizableEdges12;
+            btnCetakStruk.DisabledState.BorderColor = Color.DarkGray;
+            btnCetakStruk.DisabledState.CustomBorderColor = Color.DarkGray;
+            btnCetakStruk.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
+            btnCetakStruk.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
+            btnCetakStruk.FillColor = Color.FromArgb(52, 152, 219);
+            btnCetakStruk.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            btnCetakStruk.ForeColor = Color.White;
+            btnCetakStruk.Location = new Point(18, 450);
+            btnCetakStruk.Name = "btnCetakStruk";
+            btnCetakStruk.ShadowDecoration.CustomizableEdges = customizableEdges12;
+            btnCetakStruk.Size = new Size(120, 45);
+            btnCetakStruk.TabIndex = 4;
+            btnCetakStruk.Text = "Cetak Struk";
+            btnCetakStruk.Visible = false;
+            // 
+            // btnDownloadStruk
+            // 
+            btnDownloadStruk.BorderRadius = 8;
+            btnDownloadStruk.CustomizableEdges = customizableEdges12;
+            btnDownloadStruk.DisabledState.BorderColor = Color.DarkGray;
+            btnDownloadStruk.DisabledState.CustomBorderColor = Color.DarkGray;
+            btnDownloadStruk.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
+            btnDownloadStruk.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
+            btnDownloadStruk.FillColor = Color.FromArgb(155, 89, 182);
+            btnDownloadStruk.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            btnDownloadStruk.ForeColor = Color.White;
+            btnDownloadStruk.Location = new Point(144, 450);
+            btnDownloadStruk.Name = "btnDownloadStruk";
+            btnDownloadStruk.ShadowDecoration.CustomizableEdges = customizableEdges12;
+            btnDownloadStruk.Size = new Size(120, 45);
+            btnDownloadStruk.TabIndex = 5;
+            btnDownloadStruk.Text = "Download";
+            btnDownloadStruk.Visible = false;
+            // 
             // VerifikasiPembayaran
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(236, 240, 241);
             ClientSize = new Size(582, 510);
+            Controls.Add(btnDownloadStruk);
+            Controls.Add(btnCetakStruk);
             Controls.Add(btnSimpan);
             Controls.Add(btnBatal);
             Controls.Add(guna2Panel2);
@@ -358,7 +400,9 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
         private Guna.UI2.WinForms.Guna2Panel guna2Panel2;
         private Guna.UI2.WinForms.Guna2HtmlLabel guna2HtmlLabel6;
         private Guna.UI2.WinForms.Guna2TextBox txtCatatan;
-        private Guna.UI2.WinForms.Guna2Button btnBatal;
+private Guna.UI2.WinForms.Guna2Button btnBatal;
         private Guna.UI2.WinForms.Guna2Button btnSimpan;
+        private Guna.UI2.WinForms.Guna2Button btnCetakStruk;
+        private Guna.UI2.WinForms.Guna2Button btnDownloadStruk;
     }
 }

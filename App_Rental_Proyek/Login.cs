@@ -15,9 +15,6 @@ namespace App_Rental_Proyek
             InitializeComponent();
         }
 
-        // =========================================================
-        // FORM LOAD
-        // =========================================================
 
         private void Login_Load(object sender, EventArgs e)
         {
@@ -64,9 +61,6 @@ namespace App_Rental_Proyek
 
         
 
-        // =========================================================
-        // AUTHENTICATE USER
-        // =========================================================
 
         private UserModel AuthenticateUser(
             string username,
@@ -101,9 +95,6 @@ namespace App_Rental_Proyek
                     query,
                     parameters);
 
-            // =====================================================
-            // USER TIDAK DITEMUKAN
-            // =====================================================
 
             if (dt.Rows.Count == 0)
             {
@@ -115,9 +106,6 @@ namespace App_Rental_Proyek
             string hashedPassword =
                 row["password"]?.ToString() ?? "";
 
-            // =====================================================
-            // VERIFIKASI PASSWORD
-            // =====================================================
 
             bool passwordValid;
 
@@ -130,8 +118,6 @@ namespace App_Rental_Proyek
             }
             catch
             {
-                // Backward compatibility jika ada password
-                // lama yang masih plain text.
                 passwordValid =
                     hashedPassword == password;
             }
@@ -141,9 +127,6 @@ namespace App_Rental_Proyek
                 return null;
             }
 
-            // =====================================================
-            // BUAT USER MODEL
-            // =====================================================
 
             return new UserModel
             {
@@ -218,7 +201,6 @@ namespace App_Rental_Proyek
 
             if (dashboardForm != null)
             {
-                // Kirim informasi user ke dashboard
                 dashboardForm.Tag = user;
 
                 this.Hide();
@@ -260,9 +242,6 @@ namespace App_Rental_Proyek
 
         private void btnSignIn_Click_1(object sender, EventArgs e)
         {
-            // =====================================================
-            // VALIDASI USERNAME
-            // =====================================================
 
             if (string.IsNullOrWhiteSpace(txtUsername.Text))
             {
@@ -277,9 +256,6 @@ namespace App_Rental_Proyek
                 return;
             }
 
-            // =====================================================
-            // VALIDASI PASSWORD
-            // =====================================================
 
             if (string.IsNullOrEmpty(txtPassword.Text))
             {
@@ -296,23 +272,13 @@ namespace App_Rental_Proyek
 
             try
             {
-                // =================================================
-                // AUTHENTICATE USER
-                // =================================================
 
                 UserModel user = AuthenticateUser(
                     txtUsername.Text.Trim(),
                     txtPassword.Text);
 
-                // =================================================
-                // LOGIN BERHASIL
-                // =================================================
-
                 if (user != null)
                 {
-                    // =============================================
-                    // CEK STATUS USER
-                    // =============================================
 
                     if (user.Status.ToLower() != "aktif")
                     {
@@ -326,15 +292,9 @@ namespace App_Rental_Proyek
                         return;
                     }
 
-                    // =============================================
-                    // SET USER YANG SEDANG LOGIN
-                    // =============================================
 
                     Helper.Session.CurrentUser = user;
 
-                    // =============================================
-                    // LOGIN BERHASIL
-                    // =============================================
 
                     MessageBox.Show(
                         $"Selamat datang, {user.Nama}!",
@@ -342,9 +302,6 @@ namespace App_Rental_Proyek
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Information);
 
-                    // =============================================
-                    // REDIRECT BERDASARKAN ROLE
-                    // =============================================
 
                     RedirectByRole(user);
                 }

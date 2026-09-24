@@ -2,7 +2,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pengembalian
 {
     partial class DetailPengembalian
     {
-        /// <summary>
+/// <summary>
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
@@ -32,6 +32,14 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pengembalian
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges2 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges3 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges4 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges5 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges6 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges7 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges8 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges9 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges10 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges11 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges12 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             guna2Panel2 = new Guna.UI2.WinForms.Guna2Panel();
             lblTitle = new Guna.UI2.WinForms.Guna2HtmlLabel();
             lblStatusDetail = new Guna.UI2.WinForms.Guna2HtmlLabel();
@@ -49,6 +57,10 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pengembalian
             lblSectionCatatan = new Guna.UI2.WinForms.Guna2HtmlLabel();
             lblCatatan = new Guna.UI2.WinForms.Guna2HtmlLabel();
             btnTutup = new Guna.UI2.WinForms.Guna2Button();
+            btnCetakStruk = new Guna.UI2.WinForms.Guna2Button();
+            btnDownloadStruk = new Guna.UI2.WinForms.Guna2Button();
+            btnCetakStruk1 = new Guna.UI2.WinForms.Guna2Button();
+            btnDownloadStruk1 = new Guna.UI2.WinForms.Guna2Button();
             guna2Panel2.SuspendLayout();
             SuspendLayout();
             // 
@@ -205,6 +217,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pengembalian
             lblKondisi.Size = new Size(690, 80);
             lblKondisi.TabIndex = 12;
             lblKondisi.Text = "-";
+            lblKondisi.Click += lblKondisi_Click;
             // 
             // lblSectionCatatan
             // 
@@ -232,7 +245,7 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pengembalian
             // btnTutup
             // 
             btnTutup.BackColor = Color.Transparent;
-            btnTutup.BorderColor = Color.FromArgb(23, 59, 99);
+            btnTutup.BorderColor = Color.FromArgb(231, 76, 60);
             btnTutup.BorderRadius = 17;
             btnTutup.BorderThickness = 2;
             btnTutup.CustomizableEdges = customizableEdges3;
@@ -240,23 +253,109 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pengembalian
             btnTutup.DisabledState.CustomBorderColor = Color.DarkGray;
             btnTutup.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
             btnTutup.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
-            btnTutup.FillColor = Color.FromArgb(23, 59, 99);
+            btnTutup.FillColor = Color.FromArgb(231, 76, 60);
             btnTutup.Font = new Font("Segoe UI Semibold", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnTutup.ForeColor = Color.White;
             btnTutup.ImageSize = new Size(22, 22);
-            btnTutup.Location = new Point(282, 620);
+            btnTutup.Location = new Point(534, 620);
             btnTutup.Name = "btnTutup";
             btnTutup.ShadowDecoration.CustomizableEdges = customizableEdges4;
             btnTutup.Size = new Size(156, 44);
-            btnTutup.TabIndex = 15;
+            btnTutup.TabIndex = 17;
             btnTutup.Text = "Tutup";
             btnTutup.Click += btnTutup_Click;
+            // 
+            // btnCetakStruk
+            // 
+            btnCetakStruk.BorderRadius = 8;
+            btnCetakStruk.CustomizableEdges = customizableEdges5;
+            btnCetakStruk.DisabledState.BorderColor = Color.DarkGray;
+            btnCetakStruk.DisabledState.CustomBorderColor = Color.DarkGray;
+            btnCetakStruk.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
+            btnCetakStruk.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
+            btnCetakStruk.FillColor = Color.FromArgb(46, 204, 113);
+            btnCetakStruk.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
+            btnCetakStruk.ForeColor = Color.White;
+            btnCetakStruk.Location = new Point(540, 530);
+            btnCetakStruk.Name = "btnCetakStruk";
+            btnCetakStruk.ShadowDecoration.CustomizableEdges = customizableEdges6;
+            btnCetakStruk.Size = new Size(150, 45);
+            btnCetakStruk.TabIndex = 15;
+            btnCetakStruk.Text = "Cetak Struk";
+            btnCetakStruk.Click += btnCetakStruk_Click;
+            // 
+            // btnDownloadStruk
+            // 
+            btnDownloadStruk.BorderRadius = 8;
+            btnDownloadStruk.CustomizableEdges = customizableEdges7;
+            btnDownloadStruk.DisabledState.BorderColor = Color.DarkGray;
+            btnDownloadStruk.DisabledState.CustomBorderColor = Color.DarkGray;
+            btnDownloadStruk.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
+            btnDownloadStruk.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
+            btnDownloadStruk.FillColor = Color.FromArgb(52, 152, 219);
+            btnDownloadStruk.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
+            btnDownloadStruk.ForeColor = Color.White;
+            btnDownloadStruk.Location = new Point(370, 530);
+            btnDownloadStruk.Name = "btnDownloadStruk";
+            btnDownloadStruk.ShadowDecoration.CustomizableEdges = customizableEdges8;
+            btnDownloadStruk.Size = new Size(170, 45);
+            btnDownloadStruk.TabIndex = 16;
+            btnDownloadStruk.Text = "Download Struk";
+            btnDownloadStruk.Click += btnDownloadStruk_Click;
+            // 
+            // btnCetakStruk1
+            // 
+            btnCetakStruk1.BackColor = Color.Transparent;
+            btnCetakStruk1.BorderColor = Color.Transparent;
+            btnCetakStruk1.BorderRadius = 17;
+            btnCetakStruk1.BorderThickness = 2;
+            btnCetakStruk1.CustomizableEdges = customizableEdges9;
+            btnCetakStruk1.DisabledState.BorderColor = Color.DarkGray;
+            btnCetakStruk1.DisabledState.CustomBorderColor = Color.DarkGray;
+            btnCetakStruk1.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
+            btnCetakStruk1.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
+            btnCetakStruk1.FillColor = Color.Blue;
+            btnCetakStruk1.Font = new Font("Segoe UI Semibold", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnCetakStruk1.ForeColor = Color.White;
+            btnCetakStruk1.ImageSize = new Size(22, 22);
+            btnCetakStruk1.Location = new Point(372, 620);
+            btnCetakStruk1.Name = "btnCetakStruk1";
+            btnCetakStruk1.ShadowDecoration.CustomizableEdges = customizableEdges10;
+            btnCetakStruk1.Size = new Size(156, 44);
+            btnCetakStruk1.TabIndex = 18;
+            btnCetakStruk1.Text = "Cetak";
+            btnCetakStruk1.Click += btnCetakStruk1_Click;
+            // 
+            // btnDownloadStruk1
+            // 
+            btnDownloadStruk1.BackColor = Color.Transparent;
+            btnDownloadStruk1.BorderColor = Color.Lime;
+            btnDownloadStruk1.BorderRadius = 17;
+            btnDownloadStruk1.BorderThickness = 2;
+            btnDownloadStruk1.CustomizableEdges = customizableEdges11;
+            btnDownloadStruk1.DisabledState.BorderColor = Color.DarkGray;
+            btnDownloadStruk1.DisabledState.CustomBorderColor = Color.DarkGray;
+            btnDownloadStruk1.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
+            btnDownloadStruk1.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
+            btnDownloadStruk1.FillColor = Color.Lime;
+            btnDownloadStruk1.Font = new Font("Segoe UI Semibold", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnDownloadStruk1.ForeColor = Color.White;
+            btnDownloadStruk1.ImageSize = new Size(22, 22);
+            btnDownloadStruk1.Location = new Point(210, 620);
+            btnDownloadStruk1.Name = "btnDownloadStruk1";
+            btnDownloadStruk1.ShadowDecoration.CustomizableEdges = customizableEdges12;
+            btnDownloadStruk1.Size = new Size(156, 44);
+            btnDownloadStruk1.TabIndex = 19;
+            btnDownloadStruk1.Text = "Download";
+            btnDownloadStruk1.Click += btnDownloadStruk1_Click;
             // 
             // DetailPengembalian
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(720, 690);
+            Controls.Add(btnDownloadStruk1);
+            Controls.Add(btnCetakStruk1);
             Controls.Add(guna2Panel2);
             Controls.Add(lblStatusDetail);
             Controls.Add(lblJudulKode);
@@ -273,6 +372,8 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pengembalian
             Controls.Add(lblSectionCatatan);
             Controls.Add(lblCatatan);
             Controls.Add(btnTutup);
+            Controls.Add(btnCetakStruk);
+            Controls.Add(btnDownloadStruk);
             FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox = false;
             MinimizeBox = false;
@@ -303,7 +404,11 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pengembalian
         private Guna.UI2.WinForms.Guna2HtmlLabel lblSectionKondisi;
         private Guna.UI2.WinForms.Guna2HtmlLabel lblKondisi;
         private Guna.UI2.WinForms.Guna2HtmlLabel lblSectionCatatan;
-        private Guna.UI2.WinForms.Guna2HtmlLabel lblCatatan;
+private Guna.UI2.WinForms.Guna2HtmlLabel lblCatatan;
         private Guna.UI2.WinForms.Guna2Button btnTutup;
+        private Guna.UI2.WinForms.Guna2Button btnCetakStruk;
+        private Guna.UI2.WinForms.Guna2Button btnDownloadStruk;
+        private Guna.UI2.WinForms.Guna2Button btnCetakStruk1;
+        private Guna.UI2.WinForms.Guna2Button btnDownloadStruk1;
     }
 }

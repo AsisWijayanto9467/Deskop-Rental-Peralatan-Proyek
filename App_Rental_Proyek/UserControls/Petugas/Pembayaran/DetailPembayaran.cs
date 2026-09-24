@@ -4,6 +4,7 @@ using MySql.Data.MySqlClient;
 using System;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 
 namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
@@ -11,6 +12,17 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
     public partial class DetailPembayaran : Form
     {
         private ulong _pembayaranId;
+        private string _kodePembayaran = "";
+        private string _kodePenyewaan = "";
+        private DateTime _tanggalPembayaran;
+        private decimal _jumlah = 0;
+        private string _metodePembayaran = "";
+        private string _namaCustomer = "";
+        private string _noTelepon = "";
+        private string _status = "";
+        private string _namaVerifikator = "";
+        private DateTime? _tanggalVerifikasi;
+        private string _catatan = "";
 
         public DetailPembayaran(ulong pembayaranId)
         {
@@ -115,6 +127,18 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
 
                 string catatan = row["catatan"]?.ToString();
                 lblCatatan.Text = string.IsNullOrWhiteSpace(catatan) ? "Catatan: -" : $"Catatan: {catatan}";
+
+                _kodePembayaran = row["kode_pembayaran"]?.ToString() ?? "";
+                _kodePenyewaan = row["kode_penyewaan"]?.ToString() ?? "";
+                _tanggalPembayaran = row["tanggal_pembayaran"] != DBNull.Value ? Convert.ToDateTime(row["tanggal_pembayaran"]) : DateTime.Now;
+                _jumlah = row["jumlah"] != DBNull.Value ? Convert.ToDecimal(row["jumlah"]) : 0;
+                _metodePembayaran = row["metode_pembayaran"]?.ToString() ?? "cash";
+                _namaCustomer = row["nama_customer"]?.ToString() ?? "";
+                _noTelepon = row["no_telepon_customer"]?.ToString() ?? "";
+                _status = row["status"]?.ToString() ?? "pending";
+                _namaVerifikator = row["nama_verifikator"]?.ToString() ?? "";
+                _tanggalVerifikasi = row["tanggal_verifikasi"] != DBNull.Value ? Convert.ToDateTime(row["tanggal_verifikasi"]) : null;
+                _catatan = catatan ?? "";
             }
             catch (Exception ex)
             {
@@ -205,6 +229,48 @@ namespace App_Rental_Proyek.UserControls.Petugas.Pembayaran
         private void btnTutup_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void btnCetakStruk_Click(object sender, EventArgs e)
+        {
+            string filePath = StrukHelper.GenerateStrukPembayaran(
+                _kodePembayaran,
+                _kodePenyewaan,
+                _tanggalPembayaran,
+                _jumlah,
+                _metodePembayaran,
+                _namaCustomer,
+                _noTelepon,
+                _status,
+                _namaVerifikator,
+                _tanggalVerifikasi,
+                _catatan);
+
+            if (!string.IsNullOrEmpty(filePath))
+            {
+                StrukHelper.OpenAndPrintStruk(filePath);
+            }
+        }
+
+        private void btnDownloadStruk_Click(object sender, EventArgs e)
+        {
+            string filePath = StrukHelper.GenerateStrukPembayaran(
+                _kodePembayaran,
+                _kodePenyewaan,
+                _tanggalPembayaran,
+                _jumlah,
+                _metodePembayaran,
+                _namaCustomer,
+                _noTelepon,
+                _status,
+                _namaVerifikator,
+                _tanggalVerifikasi,
+                _catatan);
+
+            if (!string.IsNullOrEmpty(filePath))
+            {
+                StrukHelper.DownloadStruk(filePath);
+            }
         }
     }
 }
